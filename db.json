@@ -1,12 +1,14 @@
 {
     "users":[
         {
+            "id":1,
             "name":"John Doe",
             "email":"john@email.com",
             "password":"1234",
             "role":"employee"
         },
         {
+            "id":2,
             "name":"Jane Doe",
             "email":"jane@email.com",
             "password":"1234",

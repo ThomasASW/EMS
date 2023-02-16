@@ -37,9 +37,10 @@ function Login() {
     setEmail("");
     setPwd("");
     localStorage.setItem("token", res.data[0].id);
+    localStorage.setItem("role", res.data[0].role);
     setTimeout(() => {
       setSuccess(false);
-      navigate("/");
+      navigate("/profile");
     }, 2500);
   };
 

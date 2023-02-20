@@ -13,6 +13,13 @@
             "email":"jane@email.com",
             "password":"1234",
             "role":"admin"
+        },
+        {
+            "id":3,
+            "name":"Johny Doe",
+            "email":"johny@email.com",
+            "password":"1234",
+            "role":"employee"
         }
     ]
 }

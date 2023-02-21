@@ -35,10 +35,8 @@ function Navibar() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav" className="navBar">
           <Nav>
-            {localStorage.getItem("role") === "admin" ? (
+            {localStorage.getItem("role") === "1" ? (
               <>
-                <Link></Link>
-                <Link></Link>
                 <NavDropdown title="Employees" id="basic-nav-dropdown">
                   <NavDropdown.Item
                     href="#"

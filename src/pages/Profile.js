@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "react-bootstrap";
-import Navibar from "../components/Navbar";
+import Navibar from "../components/Navibar";
 import axios from "axios";
 import { useEffect } from "react";
 

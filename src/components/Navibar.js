@@ -8,7 +8,7 @@ import { AiOutlineLogin } from "react-icons/ai";
 import { AiOutlineLogout } from "react-icons/ai";
 import { Link, useNavigate } from "react-router-dom";
 
-function Navibar() {
+const Navibar = () => {
   const navigate = useNavigate();
   const [logged, setLogged] = useState(0);
 
@@ -22,7 +22,7 @@ function Navibar() {
     navigate("/login");
   };
 
-  const navigateOnClick = (location) => {
+  const navigateOnClick = (location, action) => {
     navigate(location);
   };
 
@@ -40,12 +40,15 @@ function Navibar() {
                 <NavDropdown title="Employees" id="basic-nav-dropdown">
                   <NavDropdown.Item
                     href="#"
-                    onClick={() => navigateOnClick("/list")}
+                    onClick={() => navigateOnClick("/list/employee")}
                   >
                     List employees
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.2">
+                  <NavDropdown.Item
+                    href="#"
+                    onClick={() => navigateOnClick("/add/employee")}
+                  >
                     Add employee
                   </NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.3">
@@ -60,7 +63,10 @@ function Navibar() {
                     List roles
                   </NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item href="#action/3.2">
+                  <NavDropdown.Item
+                    href="#"
+                    onClick={() => navigateOnClick("/add/role")}
+                  >
                     Add role
                   </NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.3">
@@ -89,6 +95,6 @@ function Navibar() {
       </Container>
     </Navbar>
   );
-}
+};
 
 export default Navibar;

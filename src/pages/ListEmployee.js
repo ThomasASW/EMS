@@ -5,7 +5,7 @@ import Navibar from "../components/Navibar";
 import Form from "react-bootstrap/Form";
 import { useEffect } from "react";
 
-export default function List() {
+const ListEmployee = () => {
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [roles, setRoles] = useState([]);
@@ -110,4 +110,6 @@ export default function List() {
       </div>
     </>
   );
-}
+};
+
+export default ListEmployee;

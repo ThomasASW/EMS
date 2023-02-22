@@ -58,6 +58,10 @@
     {
       "id": 2,
       "roleName": "Employee"
+    },
+    {
+      "roleName": "Developer",
+      "id": 3
     }
   ]
 }

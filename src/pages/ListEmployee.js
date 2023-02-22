@@ -11,28 +11,37 @@ const ListEmployee = () => {
   const [roles, setRoles] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState("0");
+  const [roleMap, setRoleMap] = useState();
 
   useEffect(() => {
     axios
       .get("http://localhost:3000/roles")
       .then((res) => {
         if (res.data) {
+          console.log(res.data);
+          var map = new Map();
+          res.data.forEach((element) => {
+            map.set(element.id, element.roleName);
+          });
+          setRoleMap(map);
           setRoles(res.data);
         } else {
           console.log("failed");
         }
       })
-      .catch((err) => console.log(err));
-    axios
-      .get("http://localhost:3000/users")
-      .then((res) => {
-        if (res.data) {
-          console.log(res.data);
-          setList(res.data);
-          setFilteredList(res.data);
-        } else {
-          console.log("failed");
-        }
+      .then(() => {
+        axios
+          .get("http://localhost:3000/users")
+          .then((res) => {
+            if (res.data) {
+              console.log(res.data);
+              setList(res.data);
+              setFilteredList(res.data);
+            } else {
+              console.log("failed");
+            }
+          })
+          .catch((err) => console.log(err));
       })
       .catch((err) => console.log(err));
   }, []);
@@ -101,7 +110,7 @@ const ListEmployee = () => {
                   <td>{row.id}</td>
                   <td>{row.name}</td>
                   <td>{row.email}</td>
-                  <td>{row.role}</td>
+                  <td>{roleMap.get(row.role)}</td>
                 </tr>
               );
             })}

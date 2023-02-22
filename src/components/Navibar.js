@@ -59,7 +59,9 @@ const Navibar = () => {
                   </NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="Roles" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">
+                  <NavDropdown.Item
+                    onClick={() => navigateOnClick("/list/role")}
+                  >
                     List roles
                   </NavDropdown.Item>
                   <NavDropdown.Divider />

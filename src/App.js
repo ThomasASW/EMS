@@ -9,6 +9,7 @@ import AddRole from "./pages/AddRole";
 import DeleteRole from "./pages/DeleteRole";
 import DeleteEmployee from "./pages/DeleteEmployee";
 import EditRole from "./pages/EditRole";
+import EditEmployee from "./pages/EditEmployee";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
       <Route exact path="/profile" element={Profile()}></Route>
       <Route exact path="/list/employee" element={ListEmployee()}></Route>
       <Route exact path="/add/employee" element={AddEmployee()}></Route>
+      <Route exact path="/edit/employee" element={EditEmployee()}></Route>
       <Route exact path="/delete/employee" element={DeleteEmployee()}></Route>
       <Route exact path="/list/role" element={ListRole()}></Route>
       <Route exact path="/add/role" element={AddRole()}></Route>

@@ -36,11 +36,11 @@
       "id": 5
     },
     {
+      "id": 6,
       "name": "Alex",
       "email": "alex@email.com",
       "password": "1234",
-      "role": 2,
-      "id": 6
+      "role": 3
     }
   ],
   "roles": [

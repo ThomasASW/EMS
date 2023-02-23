@@ -51,7 +51,10 @@ const Navibar = () => {
                   >
                     Add employee
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
+                  <NavDropdown.Item
+                    href="#"
+                    onClick={() => navigateOnClick("/edit/employee")}
+                  >
                     Edit employee
                   </NavDropdown.Item>
                   <NavDropdown.Item

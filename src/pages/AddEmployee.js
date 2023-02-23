@@ -53,15 +53,17 @@ const AddEmployee = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await axios
-      .post("http://localhost:3000/users", {
-        name: name,
-        email: email,
-        password: password,
-        role: Number(role),
-      })
-      .then(handleSuccess)
-      .catch((err) => console.log(err));
+    if (Number(role) != 0) {
+      await axios
+        .post("http://localhost:3000/users", {
+          name: name,
+          email: email,
+          password: password,
+          role: Number(role),
+        })
+        .then(handleSuccess)
+        .catch((err) => console.log(err));
+    }
   };
 
   return (

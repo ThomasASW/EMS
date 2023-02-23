@@ -8,6 +8,7 @@ import ListRole from "./pages/ListRoles";
 import AddRole from "./pages/AddRole";
 import DeleteRole from "./pages/DeleteRole";
 import DeleteEmployee from "./pages/DeleteEmployee";
+import EditRole from "./pages/EditRole";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route exact path="/delete/employee" element={DeleteEmployee()}></Route>
       <Route exact path="/list/role" element={ListRole()}></Route>
       <Route exact path="/add/role" element={AddRole()}></Route>
+      <Route exact path="/edit/role" element={EditRole()}></Route>
       <Route exact path="/delete/role" element={DeleteRole()}></Route>
     </Routes>
   );

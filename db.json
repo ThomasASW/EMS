@@ -53,8 +53,8 @@
       "roleName": "Employee"
     },
     {
-      "roleName": "Developer",
-      "id": 3
+      "id": 3,
+      "roleName": "HR"
     }
   ]
 }

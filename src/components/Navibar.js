@@ -75,7 +75,10 @@ const Navibar = () => {
                   >
                     Add role
                   </NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.3">
+                  <NavDropdown.Item
+                    href="#"
+                    onClick={() => navigateOnClick("/edit/role")}
+                  >
                     Edit role
                   </NavDropdown.Item>
                   <NavDropdown.Item

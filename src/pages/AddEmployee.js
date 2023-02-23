@@ -12,7 +12,9 @@ const AddEmployee = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
-  const [success, setSuccess] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalHeader, setModalHeader] = useState("");
+  const [modalText, setModalText] = useState("");
 
   useEffect(() => {
     axios
@@ -41,13 +43,15 @@ const AddEmployee = () => {
   };
 
   const handleSuccess = () => {
-    setSuccess(true);
+    setModalHeader("Success");
+    setModalText("Employee added successfully...");
+    setShowModal(true);
     setTimeout(() => {
       setName("");
       setEmail("");
       setPassword("");
       setRole("");
-      setSuccess(false);
+      setShowModal(false);
     }, 2500);
   };
 
@@ -63,16 +67,25 @@ const AddEmployee = () => {
         })
         .then(handleSuccess)
         .catch((err) => console.log(err));
+    } else {
+      setModalHeader("Error");
+      setModalText("Please select a role");
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 2500);
     }
   };
 
   return (
     <>
-      <Modal size="sm" show={success} backdrop="static" keyboard={false}>
+      <Modal size="sm" show={showModal} backdrop="static" keyboard={false}>
         <Modal.Header>
-          <Modal.Title id="example-modal-sizes-title-sm">Success</Modal.Title>
+          <Modal.Title id="example-modal-sizes-title-sm">
+            {modalHeader}
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>Employee added successfully...</Modal.Body>
+        <Modal.Body>{modalText}</Modal.Body>
       </Modal>
       <Navibar />
       <div className="restGrid">

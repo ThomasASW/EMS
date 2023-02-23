@@ -5,22 +5,22 @@ import Navibar from "../components/Navibar";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
-const DeleteRole = () => {
-  const [role, setRole] = useState("");
+const EmployeeRole = () => {
+  const [employee, setEmployee] = useState("");
   const [modalHeader, setModalHeader] = useState("");
   const [modalText, setModalText] = useState("");
   const [showModal, setShowModal] = useState(false);
 
-  const handleRole = (event) => {
-    setRole(event.target.value);
+  const handleEmployeeID = (event) => {
+    setEmployee(event.target.value);
   };
 
   const handleSuccess = () => {
     setShowModal(true);
     setModalHeader("Success");
-    setModalText("Role added successfully...");
+    setModalText("Employee deleted successfully...");
     setTimeout(() => {
-      setRole("");
+      setEmployee("");
       setShowModal(false);
     }, 2500);
   };
@@ -30,7 +30,7 @@ const DeleteRole = () => {
     setModalHeader("Error");
     setModalText("Given ID does not exist");
     setTimeout(() => {
-      setRole("");
+      setEmployee("");
       setShowModal(false);
     }, 2500);
   };
@@ -38,7 +38,7 @@ const DeleteRole = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     await axios
-      .delete(`http://localhost:3000/roles/${role}`)
+      .delete(`http://localhost:3000/users/${employee}`)
       .then(handleSuccess)
       .catch(handleError);
   };
@@ -55,15 +55,15 @@ const DeleteRole = () => {
       </Modal>
       <Navibar />
       <div className="restGrid">
-        <h2>Delete role</h2>
+        <h2>Delete employee</h2>
         <Form onSubmit={(event) => handleSubmit(event)}>
           <Form.Group className="mb-3" controlId="formBasicName">
-            <Form.Label>Role ID</Form.Label>
+            <Form.Label>Employee ID</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter role ID"
-              value={role}
-              onChange={(event) => handleRole(event)}
+              placeholder="Enter employee ID"
+              value={employee}
+              onChange={(event) => handleEmployeeID(event)}
             />
           </Form.Group>
           <Button variant="primary" type="submit">
@@ -75,4 +75,4 @@ const DeleteRole = () => {
   );
 };
 
-export default DeleteRole;
+export default EmployeeRole;

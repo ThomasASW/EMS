@@ -18,7 +18,7 @@ const DeleteRole = () => {
   const handleSuccess = () => {
     setShowModal(true);
     setModalHeader("Success");
-    setModalText("Role added successfully...");
+    setModalText("Role deleted successfully...");
     setTimeout(() => {
       setRole("");
       setShowModal(false);

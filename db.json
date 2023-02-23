@@ -41,13 +41,6 @@
       "password": "1234",
       "role": 2,
       "id": 6
-    },
-    {
-      "name": "James",
-      "email": "james@email.com",
-      "password": "1234",
-      "role": 2,
-      "id": 7
     }
   ],
   "roles": [

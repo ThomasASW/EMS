@@ -1,11 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Table from "react-bootstrap/Table";
-import Navibar from "../components/Navibar";
 import Form from "react-bootstrap/Form";
 import { useEffect } from "react";
 import BootstrapTable from "../components/BootstrapTable";
-import Footer from "../components/Footer";
 
 const ListEmployee = () => {
   const [list, setList] = useState([]);
@@ -79,7 +76,6 @@ const ListEmployee = () => {
 
   return (
     <>
-      <Navibar />
       <div className="restGrid">
         <Form.Control
           type="text"
@@ -110,7 +106,6 @@ const ListEmployee = () => {
           })}
         />
       </div>
-      <Footer />
     </>
   );
 };

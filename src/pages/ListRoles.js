@@ -1,9 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Navibar from "../components/Navibar";
 import { useEffect } from "react";
 import BootstrapTable from "../components/BootstrapTable";
-import Footer from "../components/Footer";
 
 const ListRole = () => {
   const [list, setList] = useState([]);
@@ -25,7 +23,6 @@ const ListRole = () => {
 
   return (
     <>
-      <Navibar />
       <div className="restGrid">
         <BootstrapTable
           headers={["#", "Role"]}
@@ -39,7 +36,6 @@ const ListRole = () => {
           })}
         />
       </div>
-      <Footer />
     </>
   );
 };

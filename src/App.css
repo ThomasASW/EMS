@@ -38,6 +38,19 @@ html,
   transition: all .3s;
 }
 
+.colorBox{
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+}
+
+.pie{
+  width: 60% !important;
+  height: 60% !important;
+  margin: 15px;
+}
+
 .navBar {
   justify-content: flex-end;
 }

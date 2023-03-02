@@ -1,7 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
-import Navibar from "../components/Navibar";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
 
@@ -39,7 +38,6 @@ const AddRole = () => {
         </Modal.Header>
         <Modal.Body>Role added successfully...</Modal.Body>
       </Modal>
-      <Navibar />
       <div className="restGrid">
         <h2>Add role</h2>
         <Form onSubmit={(event) => handleSubmit(event)}>

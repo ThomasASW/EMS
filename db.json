@@ -41,6 +41,13 @@
       "email": "alex@email.com",
       "password": "1234",
       "role": 3
+    },
+    {
+      "name": "CJ",
+      "email": "cj@email.com",
+      "password": "1234",
+      "role": 3,
+      "id": 7
     }
   ],
   "roles": [

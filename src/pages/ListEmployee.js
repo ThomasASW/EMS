@@ -4,6 +4,8 @@ import Table from "react-bootstrap/Table";
 import Navibar from "../components/Navibar";
 import Form from "react-bootstrap/Form";
 import { useEffect } from "react";
+import BootstrapTable from "../components/BootstrapTable";
+import Footer from "../components/Footer";
 
 const ListEmployee = () => {
   const [list, setList] = useState([]);
@@ -94,29 +96,21 @@ const ListEmployee = () => {
             );
           })}
         </Form.Select>
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredList.map((row, index) => {
-              return (
-                <tr key={index}>
-                  <td>{row.id}</td>
-                  <td>{row.name}</td>
-                  <td>{row.email}</td>
-                  <td>{roleMap.get(row.role)}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+        <BootstrapTable
+          headers={["#", "Name", "Email", "Role"]}
+          data={filteredList.map((row, index) => {
+            return (
+              <tr key={index}>
+                <td>{row.id}</td>
+                <td>{row.name}</td>
+                <td>{row.email}</td>
+                <td>{roleMap.get(row.role)}</td>
+              </tr>
+            );
+          })}
+        />
       </div>
+      <Footer />
     </>
   );
 };

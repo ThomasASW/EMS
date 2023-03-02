@@ -1,48 +1,45 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Table from "react-bootstrap/Table";
 import Navibar from "../components/Navibar";
 import { useEffect } from "react";
+import BootstrapTable from "../components/BootstrapTable";
+import Footer from "../components/Footer";
 
 const ListRole = () => {
   const [list, setList] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/roles")
-      .then((res) => {
-        if (res.data) {
-          setList(res.data);
-        } else {
-          console.log("failed");
-        }
-      })
-      .catch((err) => console.log(err));
+    (async () => {
+      await axios
+        .get("http://localhost:3000/roles")
+        .then((response) => {
+          if (response.data) {
+            setList(response.data);
+          } else {
+            console.log("failed");
+          }
+        })
+        .catch((error) => console.log(error));
+    })();
   }, []);
 
   return (
     <>
       <Navibar />
       <div className="restGrid">
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Role</th>
-            </tr>
-          </thead>
-          <tbody>
-            {list.map((row, index) => {
-              return (
-                <tr key={index}>
-                  <td>{row.id}</td>
-                  <td>{row.roleName}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </Table>
+        <BootstrapTable
+          headers={["#", "Role"]}
+          data={list.map((row, index) => {
+            return (
+              <tr key={index}>
+                <td>{row.id}</td>
+                <td>{row.roleName}</td>
+              </tr>
+            );
+          })}
+        />
       </div>
+      <Footer />
     </>
   );
 };

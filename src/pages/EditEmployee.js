@@ -3,22 +3,39 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Modal from "react-bootstrap/Modal";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditEmployee = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [roles, setRoles] = useState([]);
 
-  const [employeeID, setEmployeeID] = useState("");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
 
-  const [found, setFound] = useState(false);
   const [modalHeader, setModalHeader] = useState("");
   const [modalText, setModalText] = useState("");
   const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
+    axios(`http://localhost:3000/users/${id}`)
+      .then((response) => {
+        setEmail(response.data.email);
+        setName(response.data.name);
+        setRole(response.data.role);
+        setPassword(response.data.password);
+      })
+      .catch((error) => {
+        console.log(error.message);
+        setModalHeader("Error");
+        setModalText("ID does not exist");
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+        }, 2500);
+      });
     axios
       .get("http://localhost:3000/roles")
       .then((res) => {
@@ -29,7 +46,7 @@ const EditEmployee = () => {
         }
       })
       .catch((err) => console.log(err));
-  }, []);
+  }, [id]);
 
   const handleName = (event) => {
     setName(event.target.value);
@@ -43,64 +60,40 @@ const EditEmployee = () => {
     setRole(event.target.value);
   };
 
-  const handleEmployeeID = (event) => {
-    setEmployeeID(event.target.value);
-  };
-
   const handleSuccess = () => {
     setModalHeader("Success");
     setModalText("Employee updated successfully");
     setShowModal(true);
     setTimeout(() => {
-      setEmployeeID("");
       setEmail("");
       setName("");
       setPassword("");
       setRole("");
       setShowModal(false);
+      navigate(-1);
     }, 2500);
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (found) {
-      if (Number(role) != 0) {
-        await axios
-          .put(`http://localhost:3000/users/${employeeID}`, {
-            id: employeeID,
-            name: name,
-            email: email,
-            password: password,
-            role: Number(role),
-          })
-          .then(handleSuccess)
-          .catch((error) => console.log(error));
-      } else {
-        setModalHeader("Error");
-        setModalText("Please select a role");
-        setShowModal(true);
-        setTimeout(() => {
-          setShowModal(false);
-        }, 2500);
-      }
-    } else {
-      await axios(`http://localhost:3000/users/${employeeID}`)
-        .then((response) => {
-          setEmail(response.data.email);
-          setName(response.data.name);
-          setRole(response.data.role);
-          setPassword(response.data.password);
-          setFound(true);
+    if (Number(role) !== 0) {
+      await axios
+        .put(`http://localhost:3000/users/${id}`, {
+          id: id,
+          name: name,
+          email: email,
+          password: password,
+          role: Number(role),
         })
-        .catch((error) => {
-          console.log(error.message);
-          setModalHeader("Error");
-          setModalText("ID does not exist");
-          setShowModal(true);
-          setTimeout(() => {
-            setShowModal(false);
-          }, 2500);
-        });
+        .then(handleSuccess)
+        .catch((error) => console.log(error));
+    } else {
+      setModalHeader("Error");
+      setModalText("Please select a role");
+      setShowModal(true);
+      setTimeout(() => {
+        setShowModal(false);
+      }, 2500);
     }
   };
 
@@ -117,53 +110,38 @@ const EditEmployee = () => {
       <div className="restGrid">
         <h2>Edit employee</h2>
         <Form onSubmit={(event) => handleSubmit(event)}>
-          <Form.Group className="mb-3" controlId="formBasicID">
-            <Form.Label>Employee ID</Form.Label>
+          <Form.Group className="mb-3" controlId="formBasicName">
+            <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
-              placeholder="Enter employee ID"
-              value={employeeID}
-              onChange={(event) => handleEmployeeID(event)}
+              placeholder="Enter name"
+              value={name}
+              onChange={(event) => handleName(event)}
             />
           </Form.Group>
-          {found ? (
-            <>
-              <Form.Group className="mb-3" controlId="formBasicName">
-                <Form.Label>Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder="Enter name"
-                  value={name}
-                  onChange={(event) => handleName(event)}
-                />
-              </Form.Group>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label>Email address</Form.Label>
-                <Form.Control
-                  type="email"
-                  placeholder="Enter email"
-                  value={email}
-                  onChange={(event) => handleEmail(event)}
-                />
-              </Form.Group>
-              <Form.Select
-                id="Select"
-                value={role}
-                onChange={(event) => handleRole(event)}
-              >
-                <option value="0">Select an option</option>
-                {roles.map((role) => {
-                  return (
-                    <option key={role.id} value={role.id}>
-                      {role.roleName}
-                    </option>
-                  );
-                })}
-              </Form.Select>
-            </>
-          ) : (
-            <></>
-          )}
+          <Form.Group className="mb-3" controlId="formBasicEmail">
+            <Form.Label>Email address</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Enter email"
+              value={email}
+              onChange={(event) => handleEmail(event)}
+            />
+          </Form.Group>
+          <Form.Select
+            id="Select"
+            value={role}
+            onChange={(event) => handleRole(event)}
+          >
+            <option value="0">Select an option</option>
+            {roles.map((role) => {
+              return (
+                <option key={role.id} value={role.id}>
+                  {role.roleName}
+                </option>
+              );
+            })}
+          </Form.Select>
           <Button variant="primary" type="submit">
             Submit
           </Button>

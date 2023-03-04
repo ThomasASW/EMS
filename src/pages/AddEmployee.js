@@ -33,7 +33,7 @@ const AddEmployee = () => {
   return (
     <>
       <Modal size="sm" show={showModal} backdrop="static" keyboard={false}>
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title id="example-modal-sizes-title-sm">
             {modalHeader}
           </Modal.Title>

@@ -20,14 +20,14 @@ const EditEmployee = () => {
   };
 
   const close = () => {
-    if (notifyDetails.modalHeader === "Success") {
-      navigate(-1);
-    } else {
+    if (notifyDetails.modalHeader === "Warning") {
       setNotifyDetails({
         showModal: false,
         modalHeader: "",
         modalText: "",
       });
+    } else {
+      navigate(-1);
     }
   };
 
@@ -65,7 +65,7 @@ const EditEmployee = () => {
         .then(handleSuccess)
         .catch((error) => console.log(error));
     } else {
-      notify(true, "Error", "Please select a role");
+      notify(true, "Warning", "Role cannot be empty");
     }
   };
 

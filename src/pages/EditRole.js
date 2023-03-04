@@ -20,15 +20,12 @@ const EditRole = () => {
   };
 
   const close = () => {
-    if (notifyDetails.modalHeader === "Success") {
-      navigate(-1);
-    } else {
-      setNotifyDetails({
-        showModal: false,
-        modalHeader: "",
-        modalText: "",
-      });
-    }
+    setNotifyDetails({
+      showModal: false,
+      modalHeader: "",
+      modalText: "",
+    });
+    navigate(-1);
   };
 
   useEffect(() => {

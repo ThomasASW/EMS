@@ -22,16 +22,20 @@ function App() {
       {location.pathname === "/login" ? <></> : <Header />}
       <Routes>
         <Route index element={<Navigate to={"/login"} />}></Route>
-        <Route exact path="/login" element={Login()}></Route>
-        <Route exact path="/profile" element={Profile()}></Route>
-        <Route exact path="/list/employee" element={ListEmployee()}></Route>
-        <Route exact path="/add/employee" element={AddEmployee()}></Route>
-        <Route exact path="/edit/employee" element={EditEmployee()}></Route>
-        <Route exact path="/delete/employee" element={DeleteEmployee()}></Route>
-        <Route exact path="/list/role" element={ListRole()}></Route>
-        <Route exact path="/add/role" element={AddRole()}></Route>
-        <Route exact path="/edit/role" element={EditRole()}></Route>
-        <Route exact path="/delete/role" element={DeleteRole()}></Route>
+        <Route exact path="/login" element={<Login />}></Route>
+        <Route exact path="/profile" element={<Profile />}></Route>
+        <Route exact path="/list/employee" element={<ListEmployee />}></Route>
+        <Route exact path="/add/employee" element={<AddEmployee />}></Route>
+        <Route path="/edit/employee/:id" element={<EditEmployee />}></Route>
+        <Route
+          exact
+          path="/delete/employee/:id"
+          element={<DeleteEmployee />}
+        ></Route>
+        <Route exact path="/list/role" element={<ListRole />}></Route>
+        <Route exact path="/add/role" element={<AddRole />}></Route>
+        <Route exact path="/edit/role/:id" element={<EditRole />}></Route>
+        <Route exact path="/delete/role/:id" element={<DeleteRole />}></Route>
       </Routes>
       {location.pathname === "/login" ? <></> : <Footer />}
     </>

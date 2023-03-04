@@ -1,20 +1,29 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Modal from "react-bootstrap/Modal";
-import AddForm from "../components/AddForm";
+import EmployeeForm from "../components/EmployeeForm";
+import NotifyModal from "../components/NotifyModal";
 
 const AddEmployee = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [modalHeader, setModalHeader] = useState("");
-  const [modalText, setModalText] = useState("");
+  const [notifyDetails, setNotifyDetails] = useState({});
+
+  const notify = (show, header, text) => {
+    setNotifyDetails({
+      showModal: show,
+      modalHeader: header,
+      modalText: text,
+    });
+  };
+
+  const close = () => {
+    setNotifyDetails({
+      showModal: false,
+      modalHeader: "",
+      modalText: "",
+    });
+  };
 
   const handleSuccess = () => {
-    setModalHeader("Success");
-    setModalText("Employee added successfully...");
-    setShowModal(true);
-    setTimeout(() => {
-      setShowModal(false);
-    }, 2500);
+    notify(true, "Success", "Employee added successfully...");
   };
 
   const handleSubmit = async (event, name, email, password, role) => {
@@ -32,17 +41,10 @@ const AddEmployee = () => {
 
   return (
     <>
-      <Modal size="sm" show={showModal} backdrop="static" keyboard={false}>
-        <Modal.Header closeButton>
-          <Modal.Title id="example-modal-sizes-title-sm">
-            {modalHeader}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{modalText}</Modal.Body>
-      </Modal>
+      <NotifyModal modalDetails={notifyDetails} handleInput={close} />
       <div className="restGrid">
         <h2>Add employee</h2>
-        <AddForm onSubmit={handleSubmit} />
+        <EmployeeForm onSubmit={handleSubmit} initialValues={undefined} />
       </div>
     </>
   );

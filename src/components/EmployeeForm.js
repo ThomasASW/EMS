@@ -3,12 +3,21 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 
-const AddForm = ({ onSubmit }) => {
+const EmployeeForm = ({ onSubmit, initialValues }) => {
   const [roles, setRoles] = useState([]);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
+
+  useEffect(() => {
+    if (initialValues !== undefined) {
+      setName(initialValues.name);
+      setEmail(initialValues.email);
+      setPassword(initialValues.password);
+      setRole(initialValues.role);
+    }
+  }, [initialValues]);
 
   useEffect(() => {
     const cancelToken = axios.CancelToken.source();
@@ -110,4 +119,4 @@ const AddForm = ({ onSubmit }) => {
   );
 };
 
-export default AddForm;
+export default EmployeeForm;

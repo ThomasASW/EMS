@@ -27,7 +27,7 @@ const EditEmployee = () => {
         modalText: "",
       });
     } else {
-      navigate(-1);
+      navigate("list/employee");
     }
   };
 

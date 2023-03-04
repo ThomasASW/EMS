@@ -25,7 +25,7 @@ const EditRole = () => {
       modalHeader: "",
       modalText: "",
     });
-    navigate(-1);
+    navigate("/list/role");
   };
 
   useEffect(() => {

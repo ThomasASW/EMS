@@ -44,24 +44,11 @@ const Navibar = () => {
                   >
                     List employees
                   </NavDropdown.Item>
-                  <NavDropdown.Divider />
                   <NavDropdown.Item
                     href="#"
                     onClick={() => navigateOnClick("/add/employee")}
                   >
                     Add employee
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    href="#"
-                    onClick={() => navigateOnClick("/edit/employee")}
-                  >
-                    Edit employee
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    href="#"
-                    onClick={() => navigateOnClick("/delete/employee")}
-                  >
-                    Delete employee
                   </NavDropdown.Item>
                 </NavDropdown>
                 <NavDropdown title="Roles" id="basic-nav-dropdown">
@@ -71,24 +58,11 @@ const Navibar = () => {
                   >
                     List roles
                   </NavDropdown.Item>
-                  <NavDropdown.Divider />
                   <NavDropdown.Item
                     href="#"
                     onClick={() => navigateOnClick("/add/role")}
                   >
                     Add role
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    href="#"
-                    onClick={() => navigateOnClick("/edit/role")}
-                  >
-                    Edit role
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    href="#"
-                    onClick={() => navigateOnClick("/delete/role")}
-                  >
-                    Delete role
                   </NavDropdown.Item>
                 </NavDropdown>
               </>

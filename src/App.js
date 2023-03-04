@@ -7,8 +7,6 @@ import ListEmployee from "./pages/ListEmployee";
 import AddEmployee from "./pages/AddEmployee";
 import ListRole from "./pages/ListRoles";
 import AddRole from "./pages/AddRole";
-import DeleteRole from "./pages/DeleteRole";
-import DeleteEmployee from "./pages/DeleteEmployee";
 import EditRole from "./pages/EditRole";
 import EditEmployee from "./pages/EditEmployee";
 import { useLocation } from "react-router-dom";
@@ -27,15 +25,9 @@ function App() {
         <Route exact path="/list/employee" element={<ListEmployee />}></Route>
         <Route exact path="/add/employee" element={<AddEmployee />}></Route>
         <Route path="/edit/employee/:id" element={<EditEmployee />}></Route>
-        <Route
-          exact
-          path="/delete/employee/:id"
-          element={<DeleteEmployee />}
-        ></Route>
         <Route exact path="/list/role" element={<ListRole />}></Route>
         <Route exact path="/add/role" element={<AddRole />}></Route>
         <Route exact path="/edit/role/:id" element={<EditRole />}></Route>
-        <Route exact path="/delete/role/:id" element={<DeleteRole />}></Route>
       </Routes>
       {location.pathname === "/login" ? <></> : <Footer />}
     </>

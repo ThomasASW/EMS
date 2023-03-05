@@ -26,6 +26,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
         cancelToken: cancelToken.token,
       })
       .then((res) => {
+        console.log(res);
         if (res.data) {
           setRoles(res.data);
         } else {
@@ -99,19 +100,22 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
           onChange={(event) => handlePassword(event)}
         />
       </Form.Group>
-      <Form.Select
-        id="Select"
-        value={role}
-        onChange={(event) => handleRole(event)}
-      >
-        {roles.map((role) => {
-          return (
-            <option key={role.id} value={role.id}>
-              {role.roleName}
-            </option>
-          );
-        })}
-      </Form.Select>
+      <Form.Group className="mb-3" controlId="Select">
+        <Form.Label>Roles</Form.Label>
+        <Form.Select
+          id="Select"
+          value={role}
+          onChange={(event) => handleRole(event)}
+        >
+          {roles.map((role) => {
+            return (
+              <option key={role.id} value={role.id}>
+                {role.roleName}
+              </option>
+            );
+          })}
+        </Form.Select>
+      </Form.Group>
       <Button variant="primary" type="submit">
         Submit
       </Button>

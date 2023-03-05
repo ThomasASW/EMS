@@ -32,7 +32,8 @@ const EditEmployee = () => {
   };
 
   useEffect(() => {
-    axios(`http://localhost:3000/users/${id}`)
+    axios
+      .get(`http://localhost:3000/users/${id}`)
       .then((response) => {
         setInitialValues({
           name: response.data.name,

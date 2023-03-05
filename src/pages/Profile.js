@@ -27,7 +27,7 @@ const Profile = () => {
       })
       .then((res) => {
         if (res.data[0]) {
-          console.log(res.data[0]);
+          // console.log(res.data[0]);
           setUserDetails(res.data[0]);
         } else {
           console.log("failed");
@@ -38,7 +38,7 @@ const Profile = () => {
           .get("http://localhost:3000/roles")
           .then((res) => {
             if (res.data) {
-              console.log(res.data);
+              // console.log(res.data);
               var map = new Map();
               res.data.forEach((element) => {
                 map.set(element.id, element.roleName);
@@ -55,7 +55,7 @@ const Profile = () => {
       .get("http://localhost:3000/users")
       .then((res) => {
         if (res.data) {
-          console.log(res.data);
+          // console.log(res.data);
           var stats = [];
           var statMap = new Map();
           res.data.forEach((element) => {

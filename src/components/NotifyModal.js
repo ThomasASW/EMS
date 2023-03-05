@@ -2,7 +2,7 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 
-const ConfirmModal = ({ modalDetails, handleInput }) => {
+const NotifyModal = ({ modalDetails, handleInput }) => {
   return (
     <Modal
       size="sm"
@@ -26,4 +26,4 @@ const ConfirmModal = ({ modalDetails, handleInput }) => {
   );
 };
 
-export default ConfirmModal;
+export default NotifyModal;

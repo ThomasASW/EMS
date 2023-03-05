@@ -11,7 +11,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
   const [role, setRole] = useState("");
 
   useEffect(() => {
-    if (initialValues !== undefined) {
+    if (Object.keys(initialValues).length > 0) {
       setName(initialValues.name);
       setEmail(initialValues.email);
       setPassword(initialValues.password);

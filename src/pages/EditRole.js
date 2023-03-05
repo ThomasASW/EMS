@@ -29,7 +29,8 @@ const EditRole = () => {
   };
 
   useEffect(() => {
-    axios(`http://localhost:3000/roles/${id}`)
+    axios
+      .get(`http://localhost:3000/roles/${id}`)
       .then((response) => {
         setInitialValue(response.data.roleName);
       })

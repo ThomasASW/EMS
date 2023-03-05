@@ -82,9 +82,9 @@ function Login() {
               />
             </Form.Group>
 
-            <Form.Group className="mb-3" controlId="formBasicRedirect">
+            {/* <Form.Group className="mb-3" controlId="formBasicRedirect">
               <Link to="/register">Create an account</Link>
-            </Form.Group>
+            </Form.Group> */}
 
             <Button variant="primary" type="submit">
               Login

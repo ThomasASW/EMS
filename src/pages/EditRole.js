@@ -8,7 +8,7 @@ const EditRole = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [initialValue, setInitialValue] = useState({});
+  const [initialValue, setInitialValue] = useState();
   const [notifyDetails, setNotifyDetails] = useState({});
 
   const notify = (show, header, text) => {

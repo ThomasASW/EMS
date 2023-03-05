@@ -44,7 +44,7 @@ const AddEmployee = () => {
       <NotifyModal modalDetails={notifyDetails} handleInput={close} />
       <div className="restGrid">
         <h2>Add employee</h2>
-        <EmployeeForm onSubmit={handleSubmit} initialValues={undefined} />
+        <EmployeeForm onSubmit={handleSubmit} initialValues={{}} />
       </div>
     </>
   );

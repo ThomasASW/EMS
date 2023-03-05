@@ -1,12 +1,11 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
 import { useEffect } from "react";
 import BootstrapTable from "../components/BootstrapTable";
-import { useNavigate } from "react-router-dom";
 import ConfirmModal from "../components/ConfirmModal";
 import NotifyModal from "../components/NotifyModal";
+import { useNavigate } from "react-router-dom";
 
 const ListEmployee = () => {
   const navigate = useNavigate();
@@ -153,38 +152,16 @@ const ListEmployee = () => {
         </Form.Select>
         <BootstrapTable
           headers={["#", "Name", "Email", "Role", "Operations"]}
-          data={filteredList.map((row, index) => {
-            return (
-              <tr key={index}>
-                <td>{row.id}</td>
-                <td>{row.name}</td>
-                <td>{row.email}</td>
-                <td>{roleMap.get(row.role)}</td>
-                <td>
-                  <Button
-                    variant="outline-success"
-                    onClick={() => navigate(`/edit/employee/${row.id}`)}
-                  >
-                    <img
-                      width="28px"
-                      src="/icons/pencil.svg"
-                      alt="Your Alt Text"
-                    ></img>
-                  </Button>
-                  <Button
-                    variant="outline-danger"
-                    onClick={() => deleteEmployee(row.id)}
-                  >
-                    <img
-                      width="28px"
-                      src="/icons/trash.svg"
-                      alt="Your Alt Text"
-                    ></img>
-                  </Button>
-                </td>
-              </tr>
-            );
+          data={filteredList.map((row) => {
+            return {
+              id: row.id,
+              name: row.name,
+              email: row.email,
+              role: roleMap.get(row.role),
+            };
           })}
+          deleteFn={deleteEmployee}
+          editFn={(id) => navigate(`/edit/employee/${id}`)}
         />
       </div>
     </>

@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BootstrapTable from "../components/BootstrapTable";
@@ -85,36 +84,9 @@ const ListRole = () => {
       <div className="restGrid">
         <BootstrapTable
           headers={["#", "Role", "Operations"]}
-          data={list.map((row, index) => {
-            return (
-              <tr key={index}>
-                <td>{row.id}</td>
-                <td>{row.roleName}</td>
-                <td>
-                  <Button
-                    variant="outline-success"
-                    onClick={() => navigate(`/edit/role/${row.id}`)}
-                  >
-                    <img
-                      width="28px"
-                      src="/icons/pencil.svg"
-                      alt="Your Alt Text"
-                    ></img>
-                  </Button>
-                  <Button
-                    variant="outline-danger"
-                    onClick={() => deleteRole(row.id)}
-                  >
-                    <img
-                      width="28px"
-                      src="/icons/trash.svg"
-                      alt="Your Alt Text"
-                    ></img>
-                  </Button>
-                </td>
-              </tr>
-            );
-          })}
+          data={list}
+          deleteFn={deleteRole}
+          editFn={(id) => navigate(`/edit/role/${id}`)}
         />
       </div>
     </>

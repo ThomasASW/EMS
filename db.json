@@ -64,8 +64,8 @@
       "roleName": "Consultant"
     },
     {
-      "roleName": "Manager",
-      "id": 4
+      "id": 4,
+      "roleName": "Manager"
     }
   ]
 }

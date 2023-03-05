@@ -3,7 +3,6 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
 const BootstrapTable = ({ headers, data, deleteFn, editFn }) => {
-  console.log(data);
   return (
     <Table striped bordered hover>
       <thead>
@@ -28,7 +27,7 @@ const BootstrapTable = ({ headers, data, deleteFn, editFn }) => {
                   <img
                     width="28px"
                     src="/icons/pencil.svg"
-                    alt="Your Alt Text"
+                    alt="Edit Button"
                   ></img>
                 </Button>
                 <Button
@@ -38,7 +37,7 @@ const BootstrapTable = ({ headers, data, deleteFn, editFn }) => {
                   <img
                     width="28px"
                     src="/icons/trash.svg"
-                    alt="Your Alt Text"
+                    alt="Delete Button"
                   ></img>
                 </Button>
               </td>

@@ -46,7 +46,7 @@ test("EmployeeForm Add Test", async () => {
     console.log(password);
     console.log(role);
   });
-  render(<EmployeeForm onSubmit={handleSubmit} />);
+  render(<EmployeeForm onSubmit={handleSubmit} initialValues={{}} />);
   const nameInput = screen.getByLabelText("Name");
   userEvent.type(nameInput, "Ben");
   expect(nameInput.value).toBe("Ben");

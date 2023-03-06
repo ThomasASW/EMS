@@ -84,7 +84,12 @@ const ListRole = () => {
       <div className="restGrid">
         <BootstrapTable
           headers={["#", "Role", "Operations"]}
-          data={list}
+          data={list.map((row) => {
+            return {
+              id: row.id,
+              roleName: row.roleName,
+            };
+          })}
           deleteFn={deleteRole}
           editFn={(id) => navigate(`/edit/role/${id}`)}
         />

@@ -12,7 +12,8 @@ const AddRole = () => {
       notify({
         modalHeader: "Success",
         modalText: "Role added successfully...",
-        callback: undefined,
+        closeCallback: undefined,
+        confirmCallback: undefined,
       })
     );
   };

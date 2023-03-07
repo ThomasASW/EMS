@@ -14,6 +14,7 @@ import Footer from "./components/Footer";
 import NotifyModal from "./components/NotifyModal";
 import { useSelector } from "react-redux";
 import { Notification } from "./AppSlice";
+import ConfirmModal from "./components/ConfirmModal";
 
 function App() {
   const location = useLocation();
@@ -21,6 +22,7 @@ function App() {
 
   return (
     <>
+      <ConfirmModal modalDetails={notify} />
       <NotifyModal modalDetails={notify} />
       {location.pathname === "/login" ? <></> : <Header />}
       <Routes>

@@ -1,32 +1,16 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import NotifyModal from "../components/NotifyModal";
 import RoleForm from "../components/RoleForm";
+import { useDispatch } from "react-redux";
+import { notify } from "../AppSlice";
 
 const EditRole = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [initialValue, setInitialValue] = useState();
-  const [notifyDetails, setNotifyDetails] = useState({});
-
-  const notify = (show, header, text) => {
-    setNotifyDetails({
-      showModal: show,
-      modalHeader: header,
-      modalText: text,
-    });
-  };
-
-  const close = () => {
-    setNotifyDetails({
-      showModal: false,
-      modalHeader: "",
-      modalText: "",
-    });
-    navigate("/list/role");
-  };
 
   useEffect(() => {
     axios
@@ -36,12 +20,26 @@ const EditRole = () => {
       })
       .catch((error) => {
         console.log(error.message);
-        notify(true, "Error", "ID does not exist");
+        dispatch(
+          notify({
+            modalHeader: "Error",
+            modalText: "ID does not exist",
+            closeCallback: () => navigate("/list/role"),
+            confirmCallback: undefined,
+          })
+        );
       });
   }, [id]);
 
   const handleSuccess = () => {
-    notify(true, "Success", "Role updated successfully");
+    dispatch(
+      notify({
+        modalHeader: "Success",
+        modalText: "Role updated successfully",
+        closeCallback: () => navigate("/list/role"),
+        confirmCallback: undefined,
+      })
+    );
   };
 
   const handleSubmit = async (event, role) => {
@@ -56,13 +54,10 @@ const EditRole = () => {
   };
 
   return (
-    <>
-      <NotifyModal modalDetails={notifyDetails} handleInput={close} />
-      <div className="restGrid">
-        <h2>Edit role</h2>
-        <RoleForm onSubmit={handleSubmit} initialValue={initialValue} />
-      </div>
-    </>
+    <div className="restGrid">
+      <h2>Edit role</h2>
+      <RoleForm onSubmit={handleSubmit} initialValue={initialValue} />
+    </div>
   );
 };
 

@@ -14,7 +14,7 @@ const NotifyModal = ({ modalDetails }) => {
   return (
     <Modal
       size="sm"
-      show={modalDetails.showModal}
+      show={modalDetails.showModal && !modalDetails.isConfirm}
       backdrop="static"
       keyboard={false}
       onHide={() => close()}

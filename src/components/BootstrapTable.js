@@ -2,7 +2,7 @@ import React from "react";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 
-const BootstrapTable = ({ headers, data, deleteFn, editFn }) => {
+const BootstrapTable = ({ headers, data }) => {
   return (
     <Table striped bordered hover>
       <thead>
@@ -20,20 +20,14 @@ const BootstrapTable = ({ headers, data, deleteFn, editFn }) => {
                 return <td key={index}>{property}</td>;
               })}
               <td>
-                <Button
-                  variant="outline-success"
-                  onClick={() => editFn(row.id)}
-                >
+                <Button variant="outline-success" onClick={() => row.editFn()}>
                   <img
                     width="28px"
                     src="/icons/pencil.svg"
                     alt="Edit Button"
                   ></img>
                 </Button>
-                <Button
-                  variant="outline-danger"
-                  onClick={() => deleteFn(row.id)}
-                >
+                <Button variant="outline-danger" onClick={() => row.deleteFn()}>
                   <img
                     width="28px"
                     src="/icons/trash.svg"

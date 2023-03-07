@@ -3,20 +3,19 @@ import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useEffect } from "react";
 import BootstrapTable from "../components/BootstrapTable";
-import ConfirmModal from "../components/ConfirmModal";
-import NotifyModal from "../components/NotifyModal";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { confirm, notify } from "../AppSlice";
 
 const ListEmployee = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const [filteredList, setFilteredList] = useState([]);
   const [roles, setRoles] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState("0");
   const [roleMap, setRoleMap] = useState();
-  const [modalDetails, setModalDetails] = useState({});
-  const [notifyDetails, setNotifyDetails] = useState({});
 
   useEffect(() => {
     getRoles();
@@ -68,48 +67,34 @@ const ListEmployee = () => {
     for (let i = 0; i < list.length; i++) {
       const element = list[i];
       if (element.id === id) {
-        setModalDetails({
-          showModal: true,
-          modalHeader: "Delete employee?",
-          modalText: `Are you sure you want to delete employee ${element.name}?`,
-          id: id,
-        });
+        dispatch(
+          confirm({
+            modalHeader: "Delete employee?",
+            modalText: `Are you sure you want to delete employee ${element.name}?`,
+            closeCallback: undefined,
+            confirmCallback: confirmDelete(id),
+          })
+        );
         break;
       }
     }
   };
 
-  const notify = (show, header, text) => {
-    setNotifyDetails({
-      showModal: show,
-      modalHeader: header,
-      modalText: text,
-    });
-  };
-
   const confirmDelete = async (id) => {
-    setModalDetails({
-      showModal: false,
-      modalHeader: "",
-      modalText: "",
-    });
-    if (id !== -1) {
-      await axios
-        .delete(`http://localhost:3000/users/${id}`)
-        .then(() => {
-          notify(true, "Success", "Employee deleted successfully...");
-          getUsers();
-        })
-        .catch((error) => console.log(error));
-    }
-  };
-
-  const close = () => {
-    setNotifyDetails({
-      showModal: false,
-      modalHeader: "",
-      modalText: "",
-    });
+    await axios
+      .delete(`http://localhost:3000/users/${id}`)
+      .then(() => {
+        dispatch(
+          notify({
+            modalHeader: "Success",
+            modalText: "Employee deleted successfully...",
+            closeCallback: undefined,
+            confirmCallback: undefined,
+          })
+        );
+        getUsers();
+      })
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -131,40 +116,36 @@ const ListEmployee = () => {
   }, [filter, searchText, list]);
 
   return (
-    <>
-      <ConfirmModal modalDetails={modalDetails} handleInput={confirmDelete} />
-      <NotifyModal modalDetails={notifyDetails} handleInput={close} />
-      <div className="restGrid">
-        <Form.Control
-          type="text"
-          placeholder="Search"
-          onChange={(event) => search(event)}
-        />
-        <Form.Select id="Select" onChange={(event) => select(event)}>
-          <option value="0">Select an option</option>
-          {roles.map((role) => {
-            return (
-              <option key={role.id} value={role.id}>
-                {role.roleName}
-              </option>
-            );
-          })}
-        </Form.Select>
-        <BootstrapTable
-          headers={["#", "Name", "Email", "Role", "Operations"]}
-          data={filteredList.map((row) => {
-            return {
-              id: row.id,
-              name: row.name,
-              email: row.email,
-              role: roleMap.get(row.role),
-            };
-          })}
-          deleteFn={deleteEmployee}
-          editFn={(id) => navigate(`/edit/employee/${id}`)}
-        />
-      </div>
-    </>
+    <div className="restGrid">
+      <Form.Control
+        type="text"
+        placeholder="Search"
+        onChange={(event) => search(event)}
+      />
+      <Form.Select id="Select" onChange={(event) => select(event)}>
+        <option value="0">Select an option</option>
+        {roles.map((role) => {
+          return (
+            <option key={role.id} value={role.id}>
+              {role.roleName}
+            </option>
+          );
+        })}
+      </Form.Select>
+      <BootstrapTable
+        headers={["#", "Name", "Email", "Role", "Operations"]}
+        data={filteredList.map((row) => {
+          return {
+            id: row.id,
+            name: row.name,
+            email: row.email,
+            role: roleMap.get(row.role),
+            deleteFn: () => deleteEmployee(row.id),
+            editFn: () => navigate(`/edit/employee/${row.id}`),
+          };
+        })}
+      />
+    </div>
   );
 };
 

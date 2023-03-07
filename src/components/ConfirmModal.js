@@ -1,15 +1,19 @@
 import React from "react";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import { useDispatch } from "react-redux";
+import { clear, confirm } from "../AppSlice";
 
-const ConfirmModal = ({ modalDetails, handleInput }) => {
+const ConfirmModal = ({ modalDetails }) => {
+  const dispatch = useDispatch();
+
   return (
     <Modal
       size="sm"
-      show={modalDetails.showModal}
+      show={modalDetails.showModal && modalDetails.isConfirm}
       backdrop="static"
       keyboard={false}
-      onHide={() => handleInput(-1)}
+      onHide={() => dispatch(clear())}
     >
       <Modal.Header closeButton>
         <Modal.Title id="example-modal-sizes-title-sm">
@@ -18,10 +22,10 @@ const ConfirmModal = ({ modalDetails, handleInput }) => {
       </Modal.Header>
       <Modal.Body>{modalDetails.modalText}</Modal.Body>
       <Modal.Footer>
-        <Button variant="secondary" onClick={() => handleInput(-1)}>
+        <Button variant="secondary" onClick={() => dispatch(clear())}>
           Cancel
         </Button>
-        <Button variant="primary" onClick={() => handleInput(modalDetails.id)}>
+        <Button variant="primary" onClick={() => dispatch(confirm())}>
           Confirm
         </Button>
       </Modal.Footer>

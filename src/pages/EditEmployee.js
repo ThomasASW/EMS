@@ -29,7 +29,8 @@ const EditEmployee = () => {
           notify({
             modalHeader: "Error",
             modalText: "ID does not exist",
-            callback: () => navigate("/list/employee"),
+            closeCallback: () => navigate("/list/employee"),
+            confirmCallback: undefined,
           })
         );
       });
@@ -40,32 +41,24 @@ const EditEmployee = () => {
       notify({
         modalHeader: "Success",
         modalText: "Employee updated successfully...",
-        callback: () => navigate("/list/employee"),
+        closeCallback: () => navigate("/list/employee"),
+        confirmCallback: undefined,
       })
     );
   };
 
   const handleSubmit = async (event, name, email, password, role) => {
     event.preventDefault();
-    if (Number(role) !== 0) {
-      await axios
-        .put(`http://localhost:3000/users/${id}`, {
-          id: id,
-          name: name,
-          email: email,
-          password: password,
-          role: Number(role),
-        })
-        .then(handleSuccess)
-        .catch((error) => console.log(error));
-    } else {
-      dispatch(
-        notify({
-          modalHeader: "Warning",
-          modalText: "Role cannot be empty",
-        })
-      );
-    }
+    await axios
+      .put(`http://localhost:3000/users/${id}`, {
+        id: id,
+        name: name,
+        email: email,
+        password: password,
+        role: Number(role),
+      })
+      .then(handleSuccess)
+      .catch((error) => console.log(error));
   };
 
   return (

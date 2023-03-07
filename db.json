@@ -57,11 +57,11 @@
       "id": 8
     },
     {
-      "name": "Mari",
-      "email": "mari@email.com",
+      "id": 9,
+      "name": "Mariya",
+      "email": "mariya@email.com",
       "password": "1234",
-      "role": 2,
-      "id": 9
+      "role": 2
     },
     {
       "name": "Ben",

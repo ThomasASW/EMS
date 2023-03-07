@@ -4,7 +4,9 @@ const initialState = {
   showModal: false,
   modalHeader: "",
   modalText: "",
-  callback: undefined,
+  isConfirm: false,
+  closeCallback: undefined,
+  confirmCallback: undefined,
 };
 
 export const AppSlice = createSlice({
@@ -13,23 +15,36 @@ export const AppSlice = createSlice({
   reducers: {
     notify: (state, data) => {
       state.showModal = true;
+      state.isConfirm = data.payload.isConfirm;
       state.modalHeader = data.payload.modalHeader;
       state.modalText = data.payload.modalText;
-      state.callback = data.payload.callback;
+      state.closeCallback = data.payload.closeCallback;
+      state.confirmCallback = data.payload.confirmCallback;
     },
-    clear: (state) => {
-      if (state.callback !== undefined) {
-        state.callback();
-      }
+    confirm: (state) => {
+      state.confirmCallback();
       state.showModal = false;
+      state.isConfirm = false;
       state.modalHeader = "";
       state.modalText = "";
-      state.callback = undefined;
+      state.closeCallback = undefined;
+      state.confirmCallback = undefined;
+    },
+    clear: (state) => {
+      if (state.closeCallback !== undefined) {
+        state.closeCallback();
+      }
+      state.showModal = false;
+      state.isConfirm = false;
+      state.modalHeader = "";
+      state.modalText = "";
+      state.closeCallback = undefined;
+      state.confirmCallback = undefined;
     },
   },
 });
 
-export const { notify, clear } = AppSlice.actions;
+export const { notify, clear, confirm } = AppSlice.actions;
 
 export const Notification = (state) => state.app;
 

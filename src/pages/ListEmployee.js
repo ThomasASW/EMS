@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import BootstrapTable from "../components/BootstrapTable";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { confirm, notify } from "../AppSlice";
+import { notify } from "../AppSlice";
 
 const ListEmployee = () => {
   const navigate = useNavigate();

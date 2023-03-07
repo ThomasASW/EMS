@@ -2,34 +2,15 @@ import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EmployeeForm from "../components/EmployeeForm";
-import NotifyModal from "../components/NotifyModal";
+import { useDispatch } from "react-redux";
+import { notify } from "../AppSlice";
 
 const EditEmployee = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [initialValues, setInitialValues] = useState({});
-  const [notifyDetails, setNotifyDetails] = useState({});
-
-  const notify = (show, header, text) => {
-    setNotifyDetails({
-      showModal: show,
-      modalHeader: header,
-      modalText: text,
-    });
-  };
-
-  const close = () => {
-    if (notifyDetails.modalHeader === "Warning") {
-      setNotifyDetails({
-        showModal: false,
-        modalHeader: "",
-        modalText: "",
-      });
-    } else {
-      navigate("/list/employee");
-    }
-  };
 
   useEffect(() => {
     axios
@@ -44,12 +25,24 @@ const EditEmployee = () => {
       })
       .catch((error) => {
         console.log(error.message);
-        notify(true, "Error", "ID does not exist");
+        dispatch(
+          notify({
+            modalHeader: "Error",
+            modalText: "ID does not exist",
+            callback: () => navigate("/list/employee"),
+          })
+        );
       });
   }, [id]);
 
   const handleSuccess = () => {
-    notify(true, "Success", "Employee updated successfully");
+    dispatch(
+      notify({
+        modalHeader: "Success",
+        modalText: "Employee updated successfully...",
+        callback: () => navigate("/list/employee"),
+      })
+    );
   };
 
   const handleSubmit = async (event, name, email, password, role) => {
@@ -66,18 +59,20 @@ const EditEmployee = () => {
         .then(handleSuccess)
         .catch((error) => console.log(error));
     } else {
-      notify(true, "Warning", "Role cannot be empty");
+      dispatch(
+        notify({
+          modalHeader: "Warning",
+          modalText: "Role cannot be empty",
+        })
+      );
     }
   };
 
   return (
-    <>
-      <NotifyModal modalDetails={notifyDetails} handleInput={close} />
-      <div className="restGrid">
-        <h2>Edit employee</h2>
-        <EmployeeForm onSubmit={handleSubmit} initialValues={initialValues} />
-      </div>
-    </>
+    <div className="restGrid">
+      <h2>Edit employee</h2>
+      <EmployeeForm onSubmit={handleSubmit} initialValues={initialValues} />
+    </div>
   );
 };
 

@@ -48,6 +48,41 @@
       "password": "1234",
       "role": 3,
       "id": 7
+    },
+    {
+      "name": "Abu",
+      "email": "abu@email.com",
+      "password": "1234",
+      "role": 4,
+      "id": 8
+    },
+    {
+      "name": "Mari",
+      "email": "mari@email.com",
+      "password": "1234",
+      "role": 2,
+      "id": 9
+    },
+    {
+      "name": "Ben",
+      "email": "ben@email.com",
+      "password": "1234",
+      "role": 2,
+      "id": 10
+    },
+    {
+      "name": "Mathew",
+      "email": "mathew@email.com",
+      "password": "1234",
+      "role": 2,
+      "id": 11
+    },
+    {
+      "name": "Hana",
+      "email": "hana@email.com",
+      "password": "1234",
+      "role": 4,
+      "id": 12
     }
   ],
   "roles": [

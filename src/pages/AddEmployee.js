@@ -1,29 +1,20 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch } from "react-redux";
+import { notify } from "../AppSlice";
 import EmployeeForm from "../components/EmployeeForm";
-import NotifyModal from "../components/NotifyModal";
 
 const AddEmployee = () => {
-  const [notifyDetails, setNotifyDetails] = useState({});
-
-  const notify = (show, header, text) => {
-    setNotifyDetails({
-      showModal: show,
-      modalHeader: header,
-      modalText: text,
-    });
-  };
-
-  const close = () => {
-    setNotifyDetails({
-      showModal: false,
-      modalHeader: "",
-      modalText: "",
-    });
-  };
+  const dispatch = useDispatch();
 
   const handleSuccess = () => {
-    notify(true, "Success", "Employee added successfully...");
+    dispatch(
+      notify({
+        modalHeader: "Success",
+        modalText: "Employee added successfully...",
+        callback: undefined,
+      })
+    );
   };
 
   const handleSubmit = async (event, name, email, password, role) => {
@@ -40,13 +31,10 @@ const AddEmployee = () => {
   };
 
   return (
-    <>
-      <NotifyModal modalDetails={notifyDetails} handleInput={close} />
-      <div className="restGrid">
-        <h2>Add employee</h2>
-        <EmployeeForm onSubmit={handleSubmit} initialValues={{}} />
-      </div>
-    </>
+    <div className="restGrid">
+      <h2>Add employee</h2>
+      <EmployeeForm onSubmit={handleSubmit} initialValues={{}} />
+    </div>
   );
 };
 

@@ -1,29 +1,20 @@
 import axios from "axios";
-import React, { useState } from "react";
-import NotifyModal from "../components/NotifyModal";
+import React from "react";
 import RoleForm from "../components/RoleForm";
+import { useDispatch } from "react-redux";
+import { notify } from "../AppSlice";
 
 const AddRole = () => {
-  const [notifyDetails, setNotifyDetails] = useState({});
-
-  const notify = (show, header, text) => {
-    setNotifyDetails({
-      showModal: show,
-      modalHeader: header,
-      modalText: text,
-    });
-  };
-
-  const close = () => {
-    setNotifyDetails({
-      showModal: false,
-      modalHeader: "",
-      modalText: "",
-    });
-  };
+  const dispatch = useDispatch();
 
   const handleSuccess = () => {
-    notify(true, "Success", "Role added successfully...");
+    dispatch(
+      notify({
+        modalHeader: "Success",
+        modalText: "Role added successfully...",
+        callback: undefined,
+      })
+    );
   };
 
   const handleSubmit = async (event, role) => {
@@ -37,13 +28,10 @@ const AddRole = () => {
   };
 
   return (
-    <>
-      <NotifyModal modalDetails={notifyDetails} handleInput={close} />
-      <div className="restGrid">
-        <h2>Add role</h2>
-        <RoleForm onSubmit={handleSubmit} initialValue={undefined} />
-      </div>
-    </>
+    <div className="restGrid">
+      <h2>Add role</h2>
+      <RoleForm onSubmit={handleSubmit} initialValue={undefined} />
+    </div>
   );
 };
 

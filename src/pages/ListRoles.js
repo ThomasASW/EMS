@@ -33,9 +33,10 @@ const ListRole = () => {
       const element = list[i];
       if (element.id === id) {
         dispatch(
-          confirm({
+          notify({
             modalHeader: "Delete role?",
             modalText: `Are you sure you want to delete ${element.roleName} role?`,
+            isConfirm: true,
             closeCallback: undefined,
             confirmCallback: confirmDelete(id),
           })
@@ -53,6 +54,7 @@ const ListRole = () => {
           notify({
             modalHeader: "Success",
             modalText: "Role deleted successfully...",
+            isConfirm: false,
             closeCallback: undefined,
             confirmCallback: undefined,
           })

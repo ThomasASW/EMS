@@ -12,6 +12,7 @@ const AddEmployee = () => {
       notify({
         modalHeader: "Success",
         modalText: "Employee added successfully...",
+        isConfirm: false,
         closeCallback: undefined,
         confirmCallback: undefined,
       })

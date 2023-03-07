@@ -29,6 +29,7 @@ const EditEmployee = () => {
           notify({
             modalHeader: "Error",
             modalText: "ID does not exist",
+            isConfirm: false,
             closeCallback: () => navigate("/list/employee"),
             confirmCallback: undefined,
           })
@@ -41,6 +42,7 @@ const EditEmployee = () => {
       notify({
         modalHeader: "Success",
         modalText: "Employee updated successfully...",
+        isConfirm: false,
         closeCallback: () => navigate("/list/employee"),
         confirmCallback: undefined,
       })

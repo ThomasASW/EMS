@@ -42,6 +42,7 @@ function Login() {
       notify({
         modalHeader: "Login successful",
         modalText: "Redirecting...",
+        isConfirm: false,
         closeCallback: () => navigate("/profile"),
         confirmCallback: undefined,
       })

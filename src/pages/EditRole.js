@@ -24,6 +24,7 @@ const EditRole = () => {
           notify({
             modalHeader: "Error",
             modalText: "ID does not exist",
+            isConfirm: false,
             closeCallback: () => navigate("/list/role"),
             confirmCallback: undefined,
           })
@@ -36,6 +37,7 @@ const EditRole = () => {
       notify({
         modalHeader: "Success",
         modalText: "Role updated successfully",
+        isConfirm: false,
         closeCallback: () => navigate("/list/role"),
         confirmCallback: undefined,
       })

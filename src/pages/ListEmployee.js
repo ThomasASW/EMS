@@ -68,9 +68,10 @@ const ListEmployee = () => {
       const element = list[i];
       if (element.id === id) {
         dispatch(
-          confirm({
+          notify({
             modalHeader: "Delete employee?",
             modalText: `Are you sure you want to delete employee ${element.name}?`,
+            isConfirm: true,
             closeCallback: undefined,
             confirmCallback: confirmDelete(id),
           })
@@ -88,6 +89,7 @@ const ListEmployee = () => {
           notify({
             modalHeader: "Success",
             modalText: "Employee deleted successfully...",
+            isConfirm: false,
             closeCallback: undefined,
             confirmCallback: undefined,
           })

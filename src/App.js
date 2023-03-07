@@ -11,12 +11,17 @@ import EditRole from "./pages/EditRole";
 import EditEmployee from "./pages/EditEmployee";
 import { useLocation } from "react-router-dom";
 import Footer from "./components/Footer";
+import NotifyModal from "./components/NotifyModal";
+import { useSelector } from "react-redux";
+import { Notification } from "./AppSlice";
 
 function App() {
   const location = useLocation();
+  const notify = useSelector(Notification);
 
   return (
     <>
+      <NotifyModal modalDetails={notify} />
       {location.pathname === "/login" ? <></> : <Header />}
       <Routes>
         <Route index element={<Navigate to={"/login"} />}></Route>

@@ -38,7 +38,7 @@ const ListRole = () => {
             modalText: `Are you sure you want to delete ${element.roleName} role?`,
             isConfirm: true,
             closeCallback: undefined,
-            confirmCallback: confirmDelete(id),
+            confirmCallback: () => confirmDelete(id),
           })
         );
         break;

@@ -73,7 +73,7 @@ const ListEmployee = () => {
             modalText: `Are you sure you want to delete employee ${element.name}?`,
             isConfirm: true,
             closeCallback: undefined,
-            confirmCallback: confirmDelete(id),
+            confirmCallback: () => confirmDelete(id),
           })
         );
         break;
@@ -135,7 +135,7 @@ const ListEmployee = () => {
         })}
       </Form.Select>
       <BootstrapTable
-        headers={["#", "Name", "Email", "Role", "Operations"]}
+        headers={["ID", "Name", "Email", "Role", "Operations"]}
         data={filteredList.map((row) => {
           return {
             id: row.id,

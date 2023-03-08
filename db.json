@@ -1,13 +1,6 @@
 {
   "users": [
     {
-      "id": 1,
-      "name": "John Doe",
-      "email": "john@email.com",
-      "password": "1234",
-      "role": 2
-    },
-    {
       "id": 2,
       "name": "Jane Doe",
       "email": "jane@email.com",
@@ -16,8 +9,8 @@
     },
     {
       "id": 3,
-      "name": "Johny Doe",
-      "email": "johny@email.com",
+      "name": "John Doe",
+      "email": "john@email.com",
       "password": "1234",
       "role": 2
     },
@@ -83,6 +76,13 @@
       "password": "1234",
       "role": 4,
       "id": 12
+    },
+    {
+      "name": "Johny",
+      "email": "johny@abc.com",
+      "password": "1234",
+      "role": 2,
+      "id": 13
     }
   ],
   "roles": [

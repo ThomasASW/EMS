@@ -6,6 +6,7 @@ import BootstrapTable from "../components/BootstrapTable";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import DatabaseService from "../services/DatabaseService";
 
 const ListEmployee = () => {
   const navigate = useNavigate();
@@ -22,37 +23,27 @@ const ListEmployee = () => {
     getUsers();
   }, []);
 
-  const getUsers = () => {
-    axios
-      .get("http://localhost:3000/users")
-      .then((res) => {
-        if (res.data) {
-          console.log(res.data);
-          setList(res.data);
-        } else {
-          console.log("failed");
-        }
-      })
-      .catch((err) => console.log(err));
+  const getUsers = async () => {
+    try {
+      const users = await DatabaseService.getUsers();
+      setList(users.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const getRoles = () => {
-    axios
-      .get("http://localhost:3000/roles")
-      .then((res) => {
-        if (res.data) {
-          console.log(res.data);
-          var map = new Map();
-          res.data.forEach((element) => {
-            map.set(element.id, element.roleName);
-          });
-          setRoleMap(map);
-          setRoles(res.data);
-        } else {
-          console.log("failed");
-        }
-      })
-      .catch((err) => console.log(err));
+  const getRoles = async () => {
+    try {
+      const roles = await DatabaseService.getRoles();
+      var map = new Map();
+      roles.data.forEach((element) => {
+        map.set(element.id, element.roleName);
+      });
+      setRoleMap(map);
+      setRoles(roles.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const search = (event) => {

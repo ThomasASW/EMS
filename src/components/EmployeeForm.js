@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import axios from "axios";
+import DatabaseService from "../services/DatabaseService";
 
 const EmployeeForm = ({ onSubmit, initialValues }) => {
   const [roles, setRoles] = useState([]);
@@ -20,30 +20,17 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
   }, [initialValues]);
 
   useEffect(() => {
-    const cancelToken = axios.CancelToken.source();
-    axios
-      .get("http://localhost:3000/roles", {
-        cancelToken: cancelToken.token,
-      })
-      .then((res) => {
-        console.log(res);
-        if (res.data) {
-          setRoles(res.data);
-        } else {
-          console.log("failed");
-        }
-      })
-      .catch((err) => {
-        if (axios.isCancel(err)) {
-          console.log("cancelled");
-        } else {
-          console.log(err);
-        }
-      });
-    return () => {
-      cancelToken.cancel();
-    };
+    getRoles();
   }, []);
+
+  const getRoles = async () => {
+    try {
+      const roles = await DatabaseService.getRoles();
+      setRoles(roles.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();

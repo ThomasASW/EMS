@@ -20,7 +20,7 @@ const BootstrapTable = ({ headers, data }) => {
                 if (index < Object.values(row).length - 2) {
                   return <td key={index}>{property}</td>;
                 } else {
-                  return <></>;
+                  return undefined;
                 }
               })}
               <td>

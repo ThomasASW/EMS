@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EmployeeForm from "../components/EmployeeForm";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import DatabaseService from "../services/DatabaseService";
 
 const EditEmployee = () => {
   const { id } = useParams();
@@ -13,29 +13,31 @@ const EditEmployee = () => {
   const [initialValues, setInitialValues] = useState({});
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/users/${id}`)
-      .then((response) => {
-        setInitialValues({
-          name: response.data.name,
-          email: response.data.email,
-          password: response.data.password,
-          role: response.data.role,
-        });
-      })
-      .catch((error) => {
-        console.log(error.message);
-        dispatch(
-          notify({
-            modalHeader: "Error",
-            modalText: "ID does not exist",
-            isConfirm: false,
-            closeCallback: () => navigate("/list/employee"),
-            confirmCallback: undefined,
-          })
-        );
-      });
+    loadInitialValues();
   }, [id]);
+
+  const loadInitialValues = async () => {
+    try {
+      const response = await DatabaseService.getUser(id);
+      setInitialValues({
+        name: response.data.name,
+        email: response.data.email,
+        password: response.data.password,
+        role: response.data.role,
+      });
+    } catch (error) {
+      console.log(error.message);
+      dispatch(
+        notify({
+          modalHeader: "Error",
+          modalText: "ID does not exist",
+          isConfirm: false,
+          closeCallback: () => navigate("/list/employee"),
+          confirmCallback: undefined,
+        })
+      );
+    }
+  };
 
   const handleSuccess = () => {
     dispatch(
@@ -51,16 +53,18 @@ const EditEmployee = () => {
 
   const handleSubmit = async (event, name, email, password, role) => {
     event.preventDefault();
-    await axios
-      .put(`http://localhost:3000/users/${id}`, {
+    try {
+      await DatabaseService.editEmployee({
         id: id,
         name: name,
         email: email,
         password: password,
         role: Number(role),
-      })
-      .then(handleSuccess)
-      .catch((error) => console.log(error));
+      });
+      handleSuccess();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

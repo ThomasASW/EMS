@@ -1,9 +1,9 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import RoleForm from "../components/RoleForm";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import DatabaseService from "../services/DatabaseService";
 
 const EditRole = () => {
   const { id } = useParams();
@@ -13,24 +13,26 @@ const EditRole = () => {
   const [initialValue, setInitialValue] = useState();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3000/roles/${id}`)
-      .then((response) => {
-        setInitialValue(response.data.roleName);
-      })
-      .catch((error) => {
-        console.log(error.message);
-        dispatch(
-          notify({
-            modalHeader: "Error",
-            modalText: "ID does not exist",
-            isConfirm: false,
-            closeCallback: () => navigate("/list/role"),
-            confirmCallback: undefined,
-          })
-        );
-      });
+    loadInitialValue();
   }, [id]);
+
+  const loadInitialValue = async () => {
+    try {
+      const response = await DatabaseService.getRole(id);
+      setInitialValue(response.data.roleName);
+    } catch (error) {
+      console.log(error.message);
+      dispatch(
+        notify({
+          modalHeader: "Error",
+          modalText: "ID does not exist",
+          isConfirm: false,
+          closeCallback: () => navigate("/list/role"),
+          confirmCallback: undefined,
+        })
+      );
+    }
+  };
 
   const handleSuccess = () => {
     dispatch(
@@ -46,13 +48,15 @@ const EditRole = () => {
 
   const handleSubmit = async (event, role) => {
     event.preventDefault();
-    await axios
-      .put(`http://localhost:3000/roles/${id}`, {
+    try {
+      await DatabaseService.editRole({
         id: id,
         roleName: role,
-      })
-      .then(handleSuccess)
-      .catch((error) => console.log(error));
+      });
+      handleSuccess();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

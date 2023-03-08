@@ -1,8 +1,8 @@
-import axios from "axios";
 import React from "react";
 import RoleForm from "../components/RoleForm";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import DatabaseService from "../services/DatabaseService";
 
 const AddRole = () => {
   const dispatch = useDispatch();
@@ -21,12 +21,14 @@ const AddRole = () => {
 
   const handleSubmit = async (event, role) => {
     event.preventDefault();
-    await axios
-      .post("http://localhost:3000/roles", {
+    try {
+      await DatabaseService.addRole({
         roleName: role,
-      })
-      .then(handleSuccess)
-      .catch((err) => console.log(err));
+      });
+      handleSuccess();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

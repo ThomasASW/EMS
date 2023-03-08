@@ -1,8 +1,8 @@
-import axios from "axios";
 import React from "react";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
 import EmployeeForm from "../components/EmployeeForm";
+import DatabaseService from "../services/DatabaseService";
 
 const AddEmployee = () => {
   const dispatch = useDispatch();
@@ -21,15 +21,17 @@ const AddEmployee = () => {
 
   const handleSubmit = async (event, name, email, password, role) => {
     event.preventDefault();
-    await axios
-      .post("http://localhost:3000/users", {
+    try {
+      await DatabaseService.addEmployee({
         name: name,
         email: email,
         password: password,
         role: Number(role),
-      })
-      .then(handleSuccess)
-      .catch((err) => console.log(err));
+      });
+      handleSuccess();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

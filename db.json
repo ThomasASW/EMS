@@ -76,6 +76,13 @@
       "password": "1234",
       "role": 4,
       "id": 12
+    },
+    {
+      "name": "Tom",
+      "email": "tom@gmail.com",
+      "password": "1234",
+      "role": 5,
+      "id": 13
     }
   ],
   "roles": [

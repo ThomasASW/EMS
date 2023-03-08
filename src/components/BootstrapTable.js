@@ -17,7 +17,11 @@ const BootstrapTable = ({ headers, data }) => {
           return (
             <tr key={index}>
               {Object.values(row).map((property, index) => {
-                return <td key={index}>{property}</td>;
+                if (index < Object.values(row).length - 2) {
+                  return <td key={index}>{property}</td>;
+                } else {
+                  return <></>;
+                }
               })}
               <td>
                 <Button variant="outline-success" onClick={() => row.editFn()}>

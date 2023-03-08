@@ -15,11 +15,11 @@
       "role": 2
     },
     {
+      "id": 4,
       "name": "Abella",
       "email": "abella@email.com",
       "password": "1234",
-      "role": 2,
-      "id": 4
+      "role": 4
     },
     {
       "id": 5,
@@ -76,13 +76,6 @@
       "password": "1234",
       "role": 4,
       "id": 12
-    },
-    {
-      "name": "Johny",
-      "email": "johny@abc.com",
-      "password": "1234",
-      "role": 2,
-      "id": 13
     }
   ],
   "roles": [
@@ -96,11 +89,15 @@
     },
     {
       "id": 3,
-      "roleName": "HR"
+      "roleName": "Human Resources"
     },
     {
       "id": 4,
       "roleName": "Manager"
+    },
+    {
+      "roleName": "Consultant",
+      "id": 5
     }
   ]
 }

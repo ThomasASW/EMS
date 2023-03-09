@@ -45,6 +45,11 @@ html,
   padding: 0;
 }
 
+.loadingSpinner{
+  width: 100%;
+  text-align: center;
+}
+
 .pie{
   width: 60% !important;
   height: 60% !important;

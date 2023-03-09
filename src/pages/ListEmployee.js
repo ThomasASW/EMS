@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
 import DatabaseService from "../services/DatabaseService";
+import { Dna } from "react-loader-spinner";
 
 const ListEmployee = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const ListEmployee = () => {
   const [searchText, setSearchText] = useState("");
   const [filter, setFilter] = useState("0");
   const [roleMap, setRoleMap] = useState();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getRoles();
@@ -26,6 +28,7 @@ const ListEmployee = () => {
     try {
       const users = await DatabaseService.getUsers();
       setList(users.data);
+      setLoading(false);
     } catch (error) {
       dispatch(
         notify({
@@ -89,6 +92,7 @@ const ListEmployee = () => {
 
   const confirmDelete = async (id) => {
     try {
+      setLoading(true);
       await DatabaseService.deleteEmployee(id);
       dispatch(
         notify({
@@ -101,6 +105,7 @@ const ListEmployee = () => {
       );
       getUsers();
     } catch (error) {
+      setLoading(false);
       dispatch(
         notify({
           modalHeader: error.message,
@@ -133,34 +138,42 @@ const ListEmployee = () => {
 
   return (
     <div className="restGrid">
-      <Form.Control
-        type="text"
-        placeholder="Search"
-        onChange={(event) => search(event)}
-      />
-      <Form.Select id="Select" onChange={(event) => select(event)}>
-        <option value="0">Select an option</option>
-        {roles.map((role) => {
-          return (
-            <option key={role.id} value={role.id}>
-              {role.roleName}
-            </option>
-          );
-        })}
-      </Form.Select>
-      <BootstrapTable
-        headers={["ID", "Name", "Email", "Role", "Operations"]}
-        data={filteredList.map((row) => {
-          return {
-            id: row.id,
-            name: row.name,
-            email: row.email,
-            role: roleMap.get(row.role),
-            deleteFn: () => deleteEmployee(row.id),
-            editFn: () => navigate(`/edit/employee/${row.id}`),
-          };
-        })}
-      />
+      {loading ? (
+        <div className="loadingSpinner">
+          <Dna height={120} width={120} />
+        </div>
+      ) : (
+        <>
+          <Form.Control
+            type="text"
+            placeholder="Search"
+            onChange={(event) => search(event)}
+          />
+          <Form.Select id="Select" onChange={(event) => select(event)}>
+            <option value="0">Select an option</option>
+            {roles.map((role) => {
+              return (
+                <option key={role.id} value={role.id}>
+                  {role.roleName}
+                </option>
+              );
+            })}
+          </Form.Select>
+          <BootstrapTable
+            headers={["ID", "Name", "Email", "Role", "Operations"]}
+            data={filteredList.map((row) => {
+              return {
+                id: row.id,
+                name: row.name,
+                email: row.email,
+                role: roleMap.get(row.role),
+                deleteFn: () => deleteEmployee(row.id),
+                editFn: () => navigate(`/edit/employee/${row.id}`),
+              };
+            })}
+          />
+        </>
+      )}
     </div>
   );
 };

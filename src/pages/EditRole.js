@@ -45,8 +45,7 @@ const EditRole = () => {
     );
   };
 
-  const handleSubmit = async (event, role) => {
-    event.preventDefault();
+  const handleSubmit = async (role) => {
     try {
       await DatabaseService.editRole({
         id: id,

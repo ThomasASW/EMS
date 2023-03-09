@@ -4,6 +4,8 @@ import Form from "react-bootstrap/Form";
 import DatabaseService from "../services/DatabaseService";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import { Oval, Dna } from "react-loader-spinner";
+import { Col, Row } from "react-bootstrap";
 
 const EmployeeForm = ({ onSubmit, initialValues }) => {
   const dispatch = useDispatch();
@@ -15,6 +17,8 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
   const [nameError, setNameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [waiting, setWaiting] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (Object.keys(initialValues).length > 0) {
@@ -33,6 +37,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
     try {
       const roles = await DatabaseService.getRoles();
       setRoles(roles.data);
+      setLoading(false);
     } catch (error) {
       dispatch(
         notify({
@@ -48,6 +53,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    setWaiting(true);
     setNameError("");
     setEmailError("");
     setPasswordError("");
@@ -66,7 +72,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
         `Please use at least 4 characters (you are currently using ${password.length} characters)`
       );
     } else {
-      onSubmit(event, name, email, password, role);
+      onSubmit(name, email, password, role);
       clearFields();
     }
   };
@@ -90,6 +96,14 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
   const handleRole = (event) => {
     setRole(event.target.value);
   };
+
+  if (loading) {
+    return (
+      <div className="loadingSpinner">
+        <Dna height={120} width={120} />
+      </div>
+    );
+  }
 
   return (
     <Form onSubmit={(event) => handleSubmit(event)}>
@@ -148,9 +162,27 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
           })}
         </Form.Select>
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
+      <Row>
+        <Col md="auto">
+          <Button variant="primary" type="submit" disabled={waiting}>
+            Submit
+          </Button>
+        </Col>
+        <Col md="auto">
+          {waiting ? (
+            <Oval
+              height={35}
+              width={35}
+              color="#0b5ed7"
+              secondaryColor="#073c8a"
+              strokeWidth={9}
+              strokeWidthSecondary={9}
+            />
+          ) : (
+            <></>
+          )}
+        </Col>
+      </Row>
     </Form>
   );
 };

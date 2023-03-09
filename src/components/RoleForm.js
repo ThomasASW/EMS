@@ -16,7 +16,7 @@ const RoleForm = ({ onSubmit, initialValue }) => {
     event.preventDefault();
     setRoleError("");
     if (role.length > 1) {
-      onSubmit(event, role);
+      onSubmit(role);
       clearFields();
     } else {
       setRoleError(

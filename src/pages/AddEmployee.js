@@ -19,8 +19,7 @@ const AddEmployee = () => {
     );
   };
 
-  const handleSubmit = async (event, name, email, password, role) => {
-    event.preventDefault();
+  const handleSubmit = async (name, email, password, role) => {
     try {
       await DatabaseService.addEmployee({
         name: name,

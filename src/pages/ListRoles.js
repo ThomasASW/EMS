@@ -5,11 +5,13 @@ import BootstrapTable from "../components/BootstrapTable";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
 import DatabaseService from "../services/DatabaseService";
+import { Dna } from "react-loader-spinner";
 
 const ListRole = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getRoles();
@@ -19,6 +21,7 @@ const ListRole = () => {
     try {
       const roles = await DatabaseService.getRoles();
       setList(roles.data);
+      setLoading(false);
     } catch (error) {
       dispatch(
         notify({
@@ -52,6 +55,7 @@ const ListRole = () => {
 
   const confirmDelete = async (id) => {
     try {
+      setLoading(true);
       await DatabaseService.deleteRole(id);
       dispatch(
         notify({
@@ -64,6 +68,7 @@ const ListRole = () => {
       );
       getRoles();
     } catch (error) {
+      setLoading(false);
       dispatch(
         notify({
           modalHeader: error.message,
@@ -78,17 +83,23 @@ const ListRole = () => {
 
   return (
     <div className="restGrid">
-      <BootstrapTable
-        headers={["#", "Role", "Operations"]}
-        data={list.map((row) => {
-          return {
-            id: row.id,
-            roleName: row.roleName,
-            deleteFn: () => deleteRole(row.id),
-            editFn: () => navigate(`/edit/role/${row.id}`),
-          };
-        })}
-      />
+      {loading ? (
+        <div className="loadingSpinner">
+          <Dna height={120} width={120} />
+        </div>
+      ) : (
+        <BootstrapTable
+          headers={["#", "Role", "Operations"]}
+          data={list.map((row) => {
+            return {
+              id: row.id,
+              roleName: row.roleName,
+              deleteFn: () => deleteRole(row.id),
+              editFn: () => navigate(`/edit/role/${row.id}`),
+            };
+          })}
+        />
+      )}
     </div>
   );
 };

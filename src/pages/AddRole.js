@@ -19,8 +19,7 @@ const AddRole = () => {
     );
   };
 
-  const handleSubmit = async (event, role) => {
-    event.preventDefault();
+  const handleSubmit = async (role) => {
     try {
       await DatabaseService.addRole({
         roleName: role,

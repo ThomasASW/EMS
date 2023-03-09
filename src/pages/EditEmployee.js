@@ -13,30 +13,29 @@ const EditEmployee = () => {
   const [initialValues, setInitialValues] = useState({});
 
   useEffect(() => {
+    const loadInitialValues = async () => {
+      try {
+        const response = await DatabaseService.getUser(id);
+        setInitialValues({
+          name: response.data.name,
+          email: response.data.email,
+          password: response.data.password,
+          role: response.data.role,
+        });
+      } catch (error) {
+        dispatch(
+          notify({
+            modalHeader: "Error",
+            modalText: "ID does not exist",
+            isConfirm: false,
+            closeCallback: () => navigate("/list/employee"),
+            confirmCallback: undefined,
+          })
+        );
+      }
+    };
     loadInitialValues();
-  }, [id]);
-
-  const loadInitialValues = async () => {
-    try {
-      const response = await DatabaseService.getUser(id);
-      setInitialValues({
-        name: response.data.name,
-        email: response.data.email,
-        password: response.data.password,
-        role: response.data.role,
-      });
-    } catch (error) {
-      dispatch(
-        notify({
-          modalHeader: "Error",
-          modalText: "ID does not exist",
-          isConfirm: false,
-          closeCallback: () => navigate("/list/employee"),
-          confirmCallback: undefined,
-        })
-      );
-    }
-  };
+  }, [dispatch, id, navigate]);
 
   const handleSuccess = () => {
     dispatch(

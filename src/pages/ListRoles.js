@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import BootstrapTable from "../components/BootstrapTable";
 import { useDispatch } from "react-redux";
@@ -13,11 +13,7 @@ const ListRole = () => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getRoles();
-  }, []);
-
-  const getRoles = async () => {
+  const getRoles = useCallback(async () => {
     try {
       const roles = await DatabaseService.getRoles();
       setList(roles.data);
@@ -33,7 +29,11 @@ const ListRole = () => {
         })
       );
     }
-  };
+  }, [dispatch]);
+
+  useEffect(() => {
+    getRoles();
+  }, [getRoles]);
 
   const deleteRole = (id) => {
     for (let i = 0; i < list.length; i++) {

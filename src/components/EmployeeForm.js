@@ -30,26 +30,25 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
   }, [initialValues]);
 
   useEffect(() => {
+    const getRoles = async () => {
+      try {
+        const roles = await DatabaseService.getRoles();
+        setRoles(roles.data);
+        setLoading(false);
+      } catch (error) {
+        dispatch(
+          notify({
+            modalHeader: error.message,
+            modalText: "Error fetching data",
+            isConfirm: false,
+            closeCallback: undefined,
+            confirmCallback: undefined,
+          })
+        );
+      }
+    };
     getRoles();
-  }, []);
-
-  const getRoles = async () => {
-    try {
-      const roles = await DatabaseService.getRoles();
-      setRoles(roles.data);
-      setLoading(false);
-    } catch (error) {
-      dispatch(
-        notify({
-          modalHeader: error.message,
-          modalText: "Error fetching data",
-          isConfirm: false,
-          closeCallback: undefined,
-          confirmCallback: undefined,
-        })
-      );
-    }
-  };
+  }, [dispatch]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();

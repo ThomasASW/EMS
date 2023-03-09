@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import BootstrapTable from "../components/BootstrapTable";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -19,12 +19,7 @@ const ListEmployee = () => {
   const [roleMap, setRoleMap] = useState();
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getRoles();
-    getUsers();
-  }, []);
-
-  const getUsers = async () => {
+  const getUsers = useCallback(async () => {
     try {
       const users = await DatabaseService.getUsers();
       setList(users.data);
@@ -40,29 +35,33 @@ const ListEmployee = () => {
         })
       );
     }
-  };
+  }, [dispatch]);
 
-  const getRoles = async () => {
-    try {
-      const roles = await DatabaseService.getRoles();
-      var map = new Map();
-      roles.data.forEach((element) => {
-        map.set(element.id, element.roleName);
-      });
-      setRoleMap(map);
-      setRoles(roles.data);
-    } catch (error) {
-      dispatch(
-        notify({
-          modalHeader: error.message,
-          modalText: "Error fetching data",
-          isConfirm: false,
-          closeCallback: undefined,
-          confirmCallback: undefined,
-        })
-      );
-    }
-  };
+  useEffect(() => {
+    const getRoles = async () => {
+      try {
+        const roles = await DatabaseService.getRoles();
+        var map = new Map();
+        roles.data.forEach((element) => {
+          map.set(element.id, element.roleName);
+        });
+        setRoleMap(map);
+        setRoles(roles.data);
+      } catch (error) {
+        dispatch(
+          notify({
+            modalHeader: error.message,
+            modalText: "Error fetching data",
+            isConfirm: false,
+            closeCallback: undefined,
+            confirmCallback: undefined,
+          })
+        );
+      }
+    };
+    getRoles();
+    getUsers();
+  }, [getUsers, dispatch]);
 
   const search = (event) => {
     setSearchText(event.target.value);

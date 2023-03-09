@@ -13,25 +13,24 @@ const EditRole = () => {
   const [initialValue, setInitialValue] = useState();
 
   useEffect(() => {
+    const loadInitialValue = async () => {
+      try {
+        const response = await DatabaseService.getRole(id);
+        setInitialValue(response.data.roleName);
+      } catch (error) {
+        dispatch(
+          notify({
+            modalHeader: "Error",
+            modalText: "ID does not exist",
+            isConfirm: false,
+            closeCallback: () => navigate("/list/role"),
+            confirmCallback: undefined,
+          })
+        );
+      }
+    };
     loadInitialValue();
-  }, [id]);
-
-  const loadInitialValue = async () => {
-    try {
-      const response = await DatabaseService.getRole(id);
-      setInitialValue(response.data.roleName);
-    } catch (error) {
-      dispatch(
-        notify({
-          modalHeader: "Error",
-          modalText: "ID does not exist",
-          isConfirm: false,
-          closeCallback: () => navigate("/list/role"),
-          confirmCallback: undefined,
-        })
-      );
-    }
-  };
+  }, [dispatch, id, navigate]);
 
   const handleSuccess = () => {
     dispatch(

@@ -23,62 +23,60 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    getRoles();
-  }, []);
-
-  const calculateUserStats = async (roles) => {
-    let roleMap = new Map();
-    roles.forEach((role) => {
-      roleMap.set(role.id, role.roleName);
-    });
-    const users = await DatabaseService.getUsers();
-    const data = users.data.map((user) => {
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: roleMap.get(user.role),
-      };
-    });
-    getUserDetails(data);
-    let stats = [];
-    roleMap.clear();
-    data.forEach((element) => {
-      roleMap.set(element.role, (roleMap.get(element.role) || 0) + 1);
-    });
-    roleMap.forEach((value, key) => {
-      stats.push({
-        title: key,
-        value: Math.round((value / data.length) * 100),
-        color: randomHsl(),
+    const calculateUserStats = async (roles) => {
+      let roleMap = new Map();
+      roles.forEach((role) => {
+        roleMap.set(role.id, role.roleName);
       });
-    });
-    setUserStats(stats);
-    setLoading(false);
-  };
+      const users = await DatabaseService.getUsers();
+      const data = users.data.map((user) => {
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: roleMap.get(user.role),
+        };
+      });
+      getUserDetails(data);
+      let stats = [];
+      roleMap.clear();
+      data.forEach((element) => {
+        roleMap.set(element.role, (roleMap.get(element.role) || 0) + 1);
+      });
+      roleMap.forEach((value, key) => {
+        stats.push({
+          title: key,
+          value: Math.round((value / data.length) * 100),
+          color: randomHsl(),
+        });
+      });
+      setUserStats(stats);
+      setLoading(false);
+    };
+    const getRoles = async () => {
+      try {
+        const roles = await DatabaseService.getRoles();
+        calculateUserStats(roles.data);
+      } catch (error) {
+        dispatch(
+          notify({
+            modalHeader: error.message,
+            modalText: "Error fetching data",
+            isConfirm: false,
+            closeCallback: undefined,
+            confirmCallback: undefined,
+          })
+        );
+      }
+    };
+    getRoles();
+  }, [dispatch]);
 
   const getUserDetails = (users) => {
     const user = users.find(
       (element) => element.id.toString() === localStorage.getItem("token")
     );
     setUserDetails(user);
-  };
-
-  const getRoles = async () => {
-    try {
-      const roles = await DatabaseService.getRoles();
-      calculateUserStats(roles.data);
-    } catch (error) {
-      dispatch(
-        notify({
-          modalHeader: error.message,
-          modalText: "Error fetching data",
-          isConfirm: false,
-          closeCallback: undefined,
-          confirmCallback: undefined,
-        })
-      );
-    }
   };
 
   return (

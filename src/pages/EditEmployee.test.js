@@ -2,11 +2,13 @@ import { render, waitFor, screen } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import EditEmployee from "./EditEmployee";
-import axios from "axios";
-import { act } from "react-dom/test-utils";
-jest.mock("axios");
+import DatabaseService from "../services/DatabaseService";
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  useDispatch: () => mockDispatch,
+}));
 
-const response = {
+const user = {
   data: {
     id: 7,
     name: "CJ",
@@ -37,19 +39,9 @@ const roles = {
   ],
 };
 
-const cancelTokenSource = {
-  cancel: jest.fn(),
-  token: { reason: { message: "user canceled" } },
-};
-
-test("EditEmployee Axios test", async () => {
-  jest
-    .spyOn(axios.CancelToken, "source")
-    .mockReturnValueOnce(cancelTokenSource);
-  act(() => {
-    axios.get.mockResolvedValueOnce(roles);
-    axios.get.mockResolvedValueOnce(response);
-  });
+test("EditEmployee getUser and getRole test", async () => {
+  jest.spyOn(DatabaseService, "getUser").mockReturnValueOnce(user);
+  jest.spyOn(DatabaseService, "getRoles").mockReturnValueOnce(roles);
   render(
     <BrowserRouter>
       <EditEmployee />
@@ -63,18 +55,15 @@ test("EditEmployee Axios test", async () => {
     const emailInput = screen.getByLabelText("Email address");
     expect(emailInput.value).toBe("cj@email.com");
   });
-  expect(axios.get).toHaveBeenCalled();
-  expect(axios.get).toHaveBeenCalledTimes(2);
+  expect(DatabaseService.getUser).toHaveBeenCalled();
+  expect(DatabaseService.getRoles).toHaveBeenCalled();
 });
 
 test("EditEmployee Axios fail test", async () => {
   jest
-    .spyOn(axios.CancelToken, "source")
-    .mockReturnValueOnce(cancelTokenSource);
-  act(() => {
-    axios.get.mockResolvedValueOnce(roles);
-    axios.get.mockResolvedValueOnce(Promise.reject({ status: 404, data: {} }));
-  });
+    .spyOn(DatabaseService, "getUser")
+    .mockReturnValueOnce(Promise.reject({ status: 404, data: {} }));
+  jest.spyOn(DatabaseService, "getRoles").mockReturnValueOnce(roles);
   render(
     <BrowserRouter>
       <EditEmployee />
@@ -84,10 +73,7 @@ test("EditEmployee Axios fail test", async () => {
     const roleInput = screen.getAllByRole("option")[0];
     expect(roleInput.value).toBe("1");
   });
-  await waitFor(() => {
-    const header = screen.getByText("Error");
-    expect(header).toBeInTheDocument();
-  });
-  expect(axios.get).toHaveBeenCalled();
-  expect(axios.get).toHaveBeenCalledTimes(2);
+  expect(DatabaseService.getUser).toHaveBeenCalled();
+  expect(DatabaseService.getRoles).toHaveBeenCalled();
+  expect(mockDispatch).toHaveBeenCalled();
 });

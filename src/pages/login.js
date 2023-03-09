@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
 import DatabaseService from "../services/DatabaseService";
+import { Oval } from "react-loader-spinner";
+import { Col, Row } from "react-bootstrap";
 
 function Login() {
   const navigate = useNavigate();
@@ -12,9 +14,11 @@ function Login() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [waiting, setWaiting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setWaiting(true);
     try {
       const user = await DatabaseService.authenticateUser({
         params: {
@@ -27,6 +31,7 @@ function Login() {
         handleSuccess(user);
       } else {
         setErrMsg("Incorrect credentials");
+        setWaiting(false);
       }
     } catch (error) {
       dispatch(
@@ -38,6 +43,7 @@ function Login() {
           confirmCallback: undefined,
         })
       );
+      setWaiting(false);
     }
   };
 
@@ -87,9 +93,27 @@ function Login() {
               required
             />
           </Form.Group>
-          <Button variant="primary" type="submit">
-            Login
-          </Button>
+          <Row>
+            <Col md="auto">
+              <Button variant="primary" type="submit" disabled={waiting}>
+                Login
+              </Button>
+            </Col>
+            <Col md="auto">
+              {waiting ? (
+                <Oval
+                  height={35}
+                  width={35}
+                  color="#0b5ed7"
+                  secondaryColor="#073c8a"
+                  strokeWidth={9}
+                  strokeWidthSecondary={9}
+                />
+              ) : (
+                <></>
+              )}
+            </Col>
+          </Row>
         </Form>
       </div>
     </div>

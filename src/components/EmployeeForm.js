@@ -51,7 +51,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
     }
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     setWaiting(true);
     setNameError("");
@@ -72,9 +72,10 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
         `Please use at least 4 characters (you are currently using ${password.length} characters)`
       );
     } else {
-      onSubmit(name, email, password, role);
+      await onSubmit(name, email, password, role);
       clearFields();
     }
+    setWaiting(false);
   };
 
   const clearFields = () => {

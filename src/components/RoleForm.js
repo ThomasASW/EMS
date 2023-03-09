@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { Oval } from "react-loader-spinner";
+import { Col, Row } from "react-bootstrap";
 
 const RoleForm = ({ onSubmit, initialValue }) => {
   const [role, setRole] = useState("");
   const [roleError, setRoleError] = useState("");
+  const [waiting, setWaiting] = useState(false);
 
   useEffect(() => {
     if (initialValue !== undefined) {
@@ -12,17 +15,19 @@ const RoleForm = ({ onSubmit, initialValue }) => {
     }
   }, [initialValue]);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
+    setWaiting(true);
     setRoleError("");
     if (role.length > 1) {
-      onSubmit(role);
+      await onSubmit(role);
       clearFields();
     } else {
       setRoleError(
         `Please use at least 2 characters (you are currently using ${role.length} characters)`
       );
     }
+    setWaiting(false);
   };
 
   const clearFields = () => {
@@ -48,9 +53,27 @@ const RoleForm = ({ onSubmit, initialValue }) => {
         />
         <Form.Text className="text-danger">{roleError}</Form.Text>
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
+      <Row>
+        <Col md="auto">
+          <Button variant="primary" type="submit" disabled={waiting}>
+            Submit
+          </Button>
+        </Col>
+        <Col md="auto">
+          {waiting ? (
+            <Oval
+              height={35}
+              width={35}
+              color="#0b5ed7"
+              secondaryColor="#073c8a"
+              strokeWidth={9}
+              strokeWidthSecondary={9}
+            />
+          ) : (
+            <></>
+          )}
+        </Col>
+      </Row>
     </Form>
   );
 };

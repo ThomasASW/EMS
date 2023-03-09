@@ -6,11 +6,13 @@ import { PieChart } from "react-minimal-pie-chart";
 import DatabaseService from "../services/DatabaseService";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import { Dna } from "react-loader-spinner";
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({});
   const [userStats, setUserStats] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const randomHsl = () =>
     "#" + (Math.random().toString(16) + "000000").substring(2, 8);
@@ -52,6 +54,7 @@ const Profile = () => {
       });
     });
     setUserStats(stats);
+    setLoading(false);
   };
 
   const getUserDetails = (users) => {
@@ -79,56 +82,62 @@ const Profile = () => {
   };
 
   return (
-    <>
-      <Container className="restGrid">
-        <Card style={{ width: "100%" }}>
-          <Card.Body>
-            <Card.Title>{userDetails.name}</Card.Title>
-            <Card.Subtitle className="mb-2 text-muted">
-              {userDetails.role}
-            </Card.Subtitle>
-            <Card.Link href={`mailto:${userDetails.email}`}>
-              {userDetails.email}
-            </Card.Link>
-          </Card.Body>
-        </Card>
-        <Card>
-          <Card.Body>
-            <Row>
-              <Col>
-                <Card.Title>User Stats</Card.Title>
-                {userStats.map((stat, index) => {
-                  return (
-                    <Row key={index}>
-                      <Col>
-                        <Card.Text>{`${stat.title} (${stat.value}%)`}</Card.Text>
-                      </Col>
-                      <Col>
-                        <div
-                          style={{ border: `solid 5px ${stat.color}` }}
-                          className="colorBox"
-                        ></div>
-                      </Col>
-                      <Col></Col>
-                    </Row>
-                  );
-                })}
-              </Col>
-              <Col>
-                <PieChart
-                  className="pie"
-                  label={({ dataEntry }) => dataEntry.value + "%"}
-                  labelStyle={{
-                    ...defaultLabelStyle,
-                  }}
-                  data={userStats}
-                />
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-      </Container>
-    </>
+    <Container className="restGrid">
+      {loading ? (
+        <div className="loadingSpinner">
+          <Dna height={120} width={120} />
+        </div>
+      ) : (
+        <>
+          <Card style={{ width: "100%" }}>
+            <Card.Body>
+              <Card.Title>{userDetails.name}</Card.Title>
+              <Card.Subtitle className="mb-2 text-muted">
+                {userDetails.role}
+              </Card.Subtitle>
+              <Card.Link href={`mailto:${userDetails.email}`}>
+                {userDetails.email}
+              </Card.Link>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Body>
+              <Row>
+                <Col>
+                  <Card.Title>User Stats</Card.Title>
+                  {userStats.map((stat, index) => {
+                    return (
+                      <Row key={index}>
+                        <Col>
+                          <Card.Text>{`${stat.title} (${stat.value}%)`}</Card.Text>
+                        </Col>
+                        <Col>
+                          <div
+                            style={{ border: `solid 5px ${stat.color}` }}
+                            className="colorBox"
+                          ></div>
+                        </Col>
+                        <Col></Col>
+                      </Row>
+                    );
+                  })}
+                </Col>
+                <Col>
+                  <PieChart
+                    className="pie"
+                    label={({ dataEntry }) => dataEntry.value + "%"}
+                    labelStyle={{
+                      ...defaultLabelStyle,
+                    }}
+                    data={userStats}
+                  />
+                </Col>
+              </Row>
+            </Card.Body>
+          </Card>
+        </>
+      )}
+    </Container>
   );
 };
 

@@ -42,8 +42,8 @@ test("EmployeeForm Add Test", async () => {
     const roleInput = screen.getByText("Admin");
   });
   const nameInput = screen.getByLabelText("Name");
-  userEvent.type(nameInput, "Ben");
-  expect(nameInput.value).toBe("Ben");
+  userEvent.type(nameInput, "Ben Joel");
+  expect(nameInput.value).toBe("Ben Joel");
   const emailInput = screen.getByLabelText("Email address");
   userEvent.type(emailInput, "ben@email.com");
   expect(emailInput.value).toBe("ben@email.com");
@@ -59,7 +59,7 @@ test("EmployeeForm Add Test", async () => {
   expect(handleSubmit).toHaveBeenCalled();
   expect(handleSubmit).toHaveBeenCalledTimes(1);
   expect(handleSubmit).toHaveBeenCalledWith(
-    "Ben",
+    "Ben Joel",
     "ben@email.com",
     "1234",
     "1"

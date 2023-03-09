@@ -27,7 +27,15 @@ const AddRole = () => {
       });
       handleSuccess();
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error adding role",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

@@ -21,7 +21,6 @@ const EditRole = () => {
       const response = await DatabaseService.getRole(id);
       setInitialValue(response.data.roleName);
     } catch (error) {
-      console.log(error.message);
       dispatch(
         notify({
           modalHeader: "Error",
@@ -55,7 +54,15 @@ const EditRole = () => {
       });
       handleSuccess();
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error editing role",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

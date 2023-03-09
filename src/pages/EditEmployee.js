@@ -26,7 +26,6 @@ const EditEmployee = () => {
         role: response.data.role,
       });
     } catch (error) {
-      console.log(error.message);
       dispatch(
         notify({
           modalHeader: "Error",
@@ -63,7 +62,15 @@ const EditEmployee = () => {
       });
       handleSuccess();
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error editing employee",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

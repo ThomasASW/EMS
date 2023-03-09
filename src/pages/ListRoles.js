@@ -20,7 +20,15 @@ const ListRole = () => {
       const roles = await DatabaseService.getRoles();
       setList(roles.data);
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error fetching data",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 
@@ -56,7 +64,15 @@ const ListRole = () => {
       );
       getRoles();
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error deleting role",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

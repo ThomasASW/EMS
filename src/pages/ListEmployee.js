@@ -27,7 +27,15 @@ const ListEmployee = () => {
       const users = await DatabaseService.getUsers();
       setList(users.data);
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error fetching data",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 
@@ -41,7 +49,15 @@ const ListEmployee = () => {
       setRoleMap(map);
       setRoles(roles.data);
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error fetching data",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 
@@ -85,7 +101,15 @@ const ListEmployee = () => {
       );
       getUsers();
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error deleting employee",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

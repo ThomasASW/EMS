@@ -4,8 +4,11 @@ import { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { PieChart } from "react-minimal-pie-chart";
 import DatabaseService from "../services/DatabaseService";
+import { useDispatch } from "react-redux";
+import { notify } from "../AppSlice";
 
 const Profile = () => {
+  const dispatch = useDispatch();
   const [userDetails, setUserDetails] = useState({});
   const [userStats, setUserStats] = useState([]);
 
@@ -22,37 +25,33 @@ const Profile = () => {
   }, []);
 
   const calculateUserStats = async (roles) => {
-    try {
-      let roleMap = new Map();
-      roles.forEach((role) => {
-        roleMap.set(role.id, role.roleName);
+    let roleMap = new Map();
+    roles.forEach((role) => {
+      roleMap.set(role.id, role.roleName);
+    });
+    const users = await DatabaseService.getUsers();
+    const data = users.data.map((user) => {
+      return {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: roleMap.get(user.role),
+      };
+    });
+    getUserDetails(data);
+    let stats = [];
+    roleMap.clear();
+    data.forEach((element) => {
+      roleMap.set(element.role, (roleMap.get(element.role) || 0) + 1);
+    });
+    roleMap.forEach((value, key) => {
+      stats.push({
+        title: key,
+        value: Math.round((value / data.length) * 100),
+        color: randomHsl(),
       });
-      const users = await DatabaseService.getUsers();
-      const data = users.data.map((user) => {
-        return {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-          role: roleMap.get(user.role),
-        };
-      });
-      getUserDetails(data);
-      let stats = [];
-      roleMap.clear();
-      data.forEach((element) => {
-        roleMap.set(element.role, (roleMap.get(element.role) || 0) + 1);
-      });
-      roleMap.forEach((value, key) => {
-        stats.push({
-          title: key,
-          value: Math.round((value / data.length) * 100),
-          color: randomHsl(),
-        });
-      });
-      setUserStats(stats);
-    } catch (error) {
-      console.log(error);
-    }
+    });
+    setUserStats(stats);
   };
 
   const getUserDetails = (users) => {
@@ -67,7 +66,15 @@ const Profile = () => {
       const roles = await DatabaseService.getRoles();
       calculateUserStats(roles.data);
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: error.message,
+          modalText: "Error fetching data",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

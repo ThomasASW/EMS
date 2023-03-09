@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 
 const RoleForm = ({ onSubmit, initialValue }) => {
   const [role, setRole] = useState("");
+  const [roleError, setRoleError] = useState("");
 
   useEffect(() => {
     if (initialValue !== undefined) {
@@ -13,8 +14,15 @@ const RoleForm = ({ onSubmit, initialValue }) => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    onSubmit(event, role);
-    clearFields();
+    setRoleError("");
+    if (role.length > 1) {
+      onSubmit(event, role);
+      clearFields();
+    } else {
+      setRoleError(
+        `Please use at least 2 characters (you are currently using ${role.length} characters)`
+      );
+    }
   };
 
   const clearFields = () => {
@@ -33,8 +41,12 @@ const RoleForm = ({ onSubmit, initialValue }) => {
           type="text"
           placeholder="Enter role name"
           value={role}
+          required
+          minLength={2}
+          isInvalid={roleError === "" ? false : true}
           onChange={(event) => handleRole(event)}
         />
+        <Form.Text className="text-danger">{roleError}</Form.Text>
       </Form.Group>
       <Button variant="primary" type="submit">
         Submit

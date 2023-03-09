@@ -3,6 +3,10 @@ import axios from "axios";
 const DATABASE_URL = "http://localhost:3000";
 
 const DatabaseService = {
+  authenticateUser: async function (user) {
+    return await axios.get(`${DATABASE_URL}/users`, user);
+  },
+
   getUsers: async function () {
     return await axios.get(`${DATABASE_URL}/users`);
   },

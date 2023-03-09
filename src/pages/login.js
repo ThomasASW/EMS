@@ -1,10 +1,10 @@
-import axios from "axios";
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import DatabaseService from "../services/DatabaseService";
 
 function Login() {
   const navigate = useNavigate();
@@ -15,29 +15,29 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await axios
-      .get("http://localhost:3000/users", {
+    try {
+      const user = await DatabaseService.authenticateUser({
         params: {
           email: email,
           password: pwd,
         },
-      })
-      .then((res) => {
-        if (res.data[0]) {
-          setErrMsg("");
-          handleSuccess(res);
-        } else {
-          setErrMsg("Incorrect credentials");
-        }
-      })
-      .catch((err) => console.log(err));
+      });
+      if (user.data[0]) {
+        setErrMsg("");
+        handleSuccess(user);
+      } else {
+        setErrMsg("Incorrect credentials");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  const handleSuccess = (res) => {
+  const handleSuccess = (user) => {
     setEmail("");
     setPwd("");
-    localStorage.setItem("token", res.data[0].id);
-    localStorage.setItem("role", res.data[0].role);
+    localStorage.setItem("token", user.data[0].id);
+    localStorage.setItem("role", user.data[0].role);
     dispatch(
       notify({
         modalHeader: "Login successful",

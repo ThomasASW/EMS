@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { useEffect } from "react";
@@ -73,21 +72,21 @@ const ListEmployee = () => {
   };
 
   const confirmDelete = async (id) => {
-    await axios
-      .delete(`http://localhost:3000/users/${id}`)
-      .then(() => {
-        dispatch(
-          notify({
-            modalHeader: "Success",
-            modalText: "Employee deleted successfully...",
-            isConfirm: false,
-            closeCallback: undefined,
-            confirmCallback: undefined,
-          })
-        );
-        getUsers();
-      })
-      .catch((error) => console.log(error));
+    try {
+      await DatabaseService.deleteEmployee(id);
+      dispatch(
+        notify({
+          modalHeader: "Success",
+          modalText: "Employee deleted successfully...",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
+      getUsers();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {

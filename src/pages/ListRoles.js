@@ -1,10 +1,10 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BootstrapTable from "../components/BootstrapTable";
 import { useDispatch } from "react-redux";
 import { notify } from "../AppSlice";
+import DatabaseService from "../services/DatabaseService";
 
 const ListRole = () => {
   const navigate = useNavigate();
@@ -16,16 +16,12 @@ const ListRole = () => {
   }, []);
 
   const getRoles = async () => {
-    await axios
-      .get("http://localhost:3000/roles")
-      .then((response) => {
-        if (response.data) {
-          setList(response.data);
-        } else {
-          console.log("failed");
-        }
-      })
-      .catch((error) => console.log(error));
+    try {
+      const roles = await DatabaseService.getRoles();
+      setList(roles.data);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const deleteRole = (id) => {
@@ -47,21 +43,21 @@ const ListRole = () => {
   };
 
   const confirmDelete = async (id) => {
-    await axios
-      .delete(`http://localhost:3000/roles/${id}`)
-      .then(() => {
-        dispatch(
-          notify({
-            modalHeader: "Success",
-            modalText: "Role deleted successfully...",
-            isConfirm: false,
-            closeCallback: undefined,
-            confirmCallback: undefined,
-          })
-        );
-        getRoles();
-      })
-      .catch((error) => console.log(error));
+    try {
+      await DatabaseService.deleteRole(id);
+      dispatch(
+        notify({
+          modalHeader: "Success",
+          modalText: "Role deleted successfully...",
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
+      getRoles();
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (

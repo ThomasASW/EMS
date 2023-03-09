@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
-import axios from "axios";
 import { useEffect } from "react";
 import Card from "react-bootstrap/Card";
 import { PieChart } from "react-minimal-pie-chart";
+import DatabaseService from "../services/DatabaseService";
 
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
@@ -19,66 +19,57 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/users", {
-        params: {
-          id: localStorage.getItem("token"),
-        },
-      })
-      .then((res) => {
-        if (res.data[0]) {
-          // console.log(res.data[0]);
-          setUserDetails(res.data[0]);
-        } else {
-          console.log("failed");
-        }
-      })
-      .then(() => {
-        axios
-          .get("http://localhost:3000/roles")
-          .then((res) => {
-            if (res.data) {
-              // console.log(res.data);
-              var map = new Map();
-              res.data.forEach((element) => {
-                map.set(element.id, element.roleName);
-              });
-              setRoleMap(map);
-            } else {
-              console.log("failed");
-            }
-          })
-          .catch((error) => console.log(error));
-      })
-      .catch((err) => console.log(err));
-    axios
-      .get("http://localhost:3000/users")
-      .then((res) => {
-        if (res.data) {
-          // console.log(res.data);
-          var stats = [];
-          var statMap = new Map();
-          res.data.forEach((element) => {
-            if (isNaN(Number(statMap.get(element.role)))) {
-              statMap.set(element.role, 1);
-            } else {
-              statMap.set(element.role, statMap.get(element.role) + 1);
-            }
-          });
-          statMap.forEach((value, key) => {
-            stats.push({
-              title: key,
-              value: Math.round((value / res.data.length) * 100),
-              color: randomHsl(),
-            });
-          });
-          setUserStats(stats);
-        } else {
-          console.log("failed");
-        }
-      })
-      .catch((error) => console.log(error));
+    getUserDetails();
+    getRoles();
+    getUsers();
   }, []);
+
+  const getUsers = async () => {
+    try {
+      const users = await DatabaseService.getUsers();
+      var stats = [];
+      var statMap = new Map();
+      users.data.forEach((element) => {
+        if (isNaN(Number(statMap.get(element.role)))) {
+          statMap.set(element.role, 1);
+        } else {
+          statMap.set(element.role, statMap.get(element.role) + 1);
+        }
+      });
+      statMap.forEach((value, key) => {
+        stats.push({
+          title: key,
+          value: Math.round((value / users.data.length) * 100),
+          color: randomHsl(),
+        });
+      });
+      setUserStats(stats);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getUserDetails = async () => {
+    try {
+      const user = await DatabaseService.getUser(localStorage.getItem("token"));
+      setUserDetails(user.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getRoles = async () => {
+    try {
+      const roles = await DatabaseService.getRoles();
+      var map = new Map();
+      roles.data.forEach((element) => {
+        map.set(element.id, element.roleName);
+      });
+      setRoleMap(map);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <>

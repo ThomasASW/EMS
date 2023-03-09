@@ -2,21 +2,21 @@ import { render, waitFor, screen } from "@testing-library/react";
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import EditRole from "./EditRole";
-import axios from "axios";
-import { act } from "react-dom/test-utils";
-jest.mock("axios");
+import DatabaseService from "../services/DatabaseService";
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  useDispatch: () => mockDispatch,
+}));
 
-const response = {
+const role = {
   data: {
     id: 1,
     roleName: "Admin",
   },
 };
 
-test("EditRole Axios test", async () => {
-  act(() => {
-    axios.get.mockResolvedValueOnce(response);
-  });
+test("EditRole getRole test", async () => {
+  jest.spyOn(DatabaseService, "getRole").mockReturnValueOnce(role);
   render(
     <BrowserRouter>
       <EditRole />
@@ -26,23 +26,24 @@ test("EditRole Axios test", async () => {
     const roleInput = screen.getByLabelText("Role Name");
     expect(roleInput.value).toBe("Admin");
   });
-  expect(axios.get).toHaveBeenCalled();
-  expect(axios.get).toHaveBeenCalledTimes(1);
+  expect(DatabaseService.getRole).toHaveBeenCalled();
+  expect(DatabaseService.getRole).toHaveBeenCalledTimes(1);
 });
 
 test("EditRole Axios fail test", async () => {
-  act(() => {
-    axios.get.mockResolvedValueOnce(Promise.reject({ status: 404, data: {} }));
-  });
+  jest
+    .spyOn(DatabaseService, "getRole")
+    .mockReturnValueOnce(Promise.reject({ status: 404, data: {} }));
   render(
     <BrowserRouter>
       <EditRole />
     </BrowserRouter>
   );
   await waitFor(() => {
-    const header = screen.getByText("Error");
-    expect(header).toBeInTheDocument();
+    const roleInput = screen.getByLabelText("Role Name");
   });
-  expect(axios.get).toHaveBeenCalled();
-  expect(axios.get).toHaveBeenCalledTimes(1);
+  expect(DatabaseService.getRole).toHaveBeenCalled();
+  expect(DatabaseService.getRole).toHaveBeenCalledTimes(1);
+  expect(mockDispatch).toHaveBeenCalled();
+  expect(mockDispatch).toHaveBeenCalledTimes(1);
 });

@@ -8,7 +8,6 @@ import DatabaseService from "../services/DatabaseService";
 const Profile = () => {
   const [userDetails, setUserDetails] = useState({});
   const [userStats, setUserStats] = useState([]);
-  const [roleMap, setRoleMap] = useState(new Map());
 
   const randomHsl = () =>
     "#" + (Math.random().toString(16) + "000000").substring(2, 8);
@@ -19,27 +18,22 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    getUserDetails();
     getRoles();
-    getUsers();
   }, []);
 
-  const getUsers = async () => {
+  const calculateUserStats = async (roles) => {
     try {
       const users = await DatabaseService.getUsers();
+      const length = users.data.length;
       var stats = [];
-      var statMap = new Map();
-      users.data.forEach((element) => {
-        if (isNaN(Number(statMap.get(element.role)))) {
-          statMap.set(element.role, 1);
-        } else {
-          statMap.set(element.role, statMap.get(element.role) + 1);
-        }
+      var count = {};
+      roles.forEach((role) => {
+        count[role.roleName] = (count[role.roleName] || 0) + 1;
       });
-      statMap.forEach((value, key) => {
+      Object.entries(count).forEach((key, value) => {
         stats.push({
-          title: key,
-          value: Math.round((value / users.data.length) * 100),
+          title: key[0],
+          value: Math.round((value / length) * 100),
           color: randomHsl(),
         });
       });
@@ -49,10 +43,21 @@ const Profile = () => {
     }
   };
 
-  const getUserDetails = async () => {
+  const getUserDetails = async (roles) => {
     try {
       const user = await DatabaseService.getUser(localStorage.getItem("token"));
-      setUserDetails(user.data[0]);
+      for (let i = 0; i < roles.length; i++) {
+        const element = roles[i];
+        if (element.id === user.data.role) {
+          setUserDetails({
+            id: user.data.id,
+            name: user.data.name,
+            email: user.data.email,
+            role: element.roleName,
+          });
+          break;
+        }
+      }
     } catch (error) {
       console.log(error);
     }
@@ -61,11 +66,8 @@ const Profile = () => {
   const getRoles = async () => {
     try {
       const roles = await DatabaseService.getRoles();
-      var map = new Map();
-      roles.data.forEach((element) => {
-        map.set(element.id, element.roleName);
-      });
-      setRoleMap(map);
+      getUserDetails(roles.data);
+      calculateUserStats(roles.data);
     } catch (error) {
       console.log(error);
     }
@@ -78,7 +80,7 @@ const Profile = () => {
           <Card.Body>
             <Card.Title>{userDetails.name}</Card.Title>
             <Card.Subtitle className="mb-2 text-muted">
-              {roleMap.get(userDetails.role)}
+              {userDetails.role}
             </Card.Subtitle>
             <Card.Link href={`mailto:${userDetails.email}`}>
               {userDetails.email}
@@ -94,7 +96,7 @@ const Profile = () => {
                   return (
                     <Row key={index}>
                       <Col>
-                        <Card.Text>{roleMap.get(stat.title)}</Card.Text>
+                        <Card.Text>{`${stat.title} (${stat.value}%)`}</Card.Text>
                       </Col>
                       <Col>
                         <div
@@ -102,8 +104,6 @@ const Profile = () => {
                           className="colorBox"
                         ></div>
                       </Col>
-                      <Col></Col>
-                      <Col></Col>
                       <Col></Col>
                     </Row>
                   );

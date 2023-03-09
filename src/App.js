@@ -15,6 +15,7 @@ import NotifyModal from "./components/NotifyModal";
 import { useSelector } from "react-redux";
 import { Notification } from "./AppSlice";
 import ConfirmModal from "./components/ConfirmModal";
+import ProtectedRoutes from "./app/ProtectedRoutes";
 
 function App() {
   const location = useLocation();
@@ -27,14 +28,16 @@ function App() {
       {location.pathname === "/login" ? <></> : <Header />}
       <Routes>
         <Route index element={<Navigate to={"/login"} />}></Route>
-        <Route exact path="/login" element={<Login />}></Route>
-        <Route exact path="/profile" element={<Profile />}></Route>
-        <Route exact path="/list/employee" element={<ListEmployee />}></Route>
-        <Route exact path="/add/employee" element={<AddEmployee />}></Route>
-        <Route path="/edit/employee/:id" element={<EditEmployee />}></Route>
-        <Route exact path="/list/role" element={<ListRole />}></Route>
-        <Route exact path="/add/role" element={<AddRole />}></Route>
-        <Route exact path="/edit/role/:id" element={<EditRole />}></Route>
+        <Route path="/login" element={<Login />}></Route>
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/profile" element={<Profile />}></Route>
+          <Route path="/list/employee" element={<ListEmployee />}></Route>
+          <Route path="/add/employee" element={<AddEmployee />}></Route>
+          <Route path="/edit/employee/:id" element={<EditEmployee />}></Route>
+          <Route path="/list/role" element={<ListRole />}></Route>
+          <Route path="/add/role" element={<AddRole />}></Route>
+          <Route path="/edit/role/:id" element={<EditRole />}></Route>
+        </Route>
       </Routes>
       {location.pathname === "/login" ? <></> : <Footer />}
     </>

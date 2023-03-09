@@ -29,7 +29,15 @@ function Login() {
         setErrMsg("Incorrect credentials");
       }
     } catch (error) {
-      console.log(error);
+      dispatch(
+        notify({
+          modalHeader: "Login failed",
+          modalText: error.message,
+          isConfirm: false,
+          closeCallback: undefined,
+          confirmCallback: undefined,
+        })
+      );
     }
   };
 

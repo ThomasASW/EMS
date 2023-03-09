@@ -23,17 +23,29 @@ const Profile = () => {
 
   const calculateUserStats = async (roles) => {
     try {
-      const users = await DatabaseService.getUsers();
-      const length = users.data.length;
-      var stats = [];
-      var count = {};
+      let roleMap = new Map();
       roles.forEach((role) => {
-        count[role.roleName] = (count[role.roleName] || 0) + 1;
+        roleMap.set(role.id, role.roleName);
       });
-      Object.entries(count).forEach((key, value) => {
+      const users = await DatabaseService.getUsers();
+      const data = users.data.map((user) => {
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: roleMap.get(user.role),
+        };
+      });
+      getUserDetails(data);
+      let stats = [];
+      roleMap.clear();
+      data.forEach((element) => {
+        roleMap.set(element.role, (roleMap.get(element.role) || 0) + 1);
+      });
+      roleMap.forEach((value, key) => {
         stats.push({
-          title: key[0],
-          value: Math.round((value / length) * 100),
+          title: key,
+          value: Math.round((value / data.length) * 100),
           color: randomHsl(),
         });
       });
@@ -43,30 +55,16 @@ const Profile = () => {
     }
   };
 
-  const getUserDetails = async (roles) => {
-    try {
-      const user = await DatabaseService.getUser(localStorage.getItem("token"));
-      for (let i = 0; i < roles.length; i++) {
-        const element = roles[i];
-        if (element.id === user.data.role) {
-          setUserDetails({
-            id: user.data.id,
-            name: user.data.name,
-            email: user.data.email,
-            role: element.roleName,
-          });
-          break;
-        }
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  const getUserDetails = (users) => {
+    const user = users.find(
+      (element) => element.id.toString() === localStorage.getItem("token")
+    );
+    setUserDetails(user);
   };
 
   const getRoles = async () => {
     try {
       const roles = await DatabaseService.getRoles();
-      getUserDetails(roles.data);
       calculateUserStats(roles.data);
     } catch (error) {
       console.log(error);

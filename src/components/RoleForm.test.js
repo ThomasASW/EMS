@@ -4,8 +4,7 @@ import React from "react";
 import RoleForm from "./RoleForm";
 
 test("RoleForm Submit Test", async () => {
-  const handleSubmit = jest.fn((e, role) => {
-    e.preventDefault();
+  const handleSubmit = jest.fn((role) => {
     console.log(role);
   });
   render(<RoleForm onSubmit={handleSubmit} />);
@@ -19,8 +18,7 @@ test("RoleForm Submit Test", async () => {
 });
 
 test("RoleForm Initial Value Test", async () => {
-  const handleSubmit = jest.fn((e, role) => {
-    e.preventDefault();
+  const handleSubmit = jest.fn((role) => {
     console.log(role);
   });
   render(<RoleForm onSubmit={handleSubmit} initialValue={"Admin"} />);

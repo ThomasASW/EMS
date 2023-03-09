@@ -56,9 +56,9 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
     setNameError("");
     setEmailError("");
     setPasswordError("");
-    if (name.length < 5) {
+    if (name.length < 3) {
       setNameError(
-        `Please use at least 5 characters (you are currently using ${name.length} characters)`
+        `Please use at least 3 characters (you are currently using ${name.length} characters)`
       );
     } else if (
       !email.match(
@@ -114,7 +114,7 @@ const EmployeeForm = ({ onSubmit, initialValues }) => {
           placeholder="Enter name"
           value={name}
           required={true}
-          minLength={5}
+          minLength={3}
           isInvalid={nameError === "" ? false : true}
           onChange={(event) => handleName(event)}
         />

@@ -1,12 +1,14 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
+import DatabaseService from "../services/DatabaseService";
 import EmployeeForm from "./EmployeeForm";
-import axios from "axios";
-import { act } from "react-dom/test-utils";
-jest.mock("axios");
+const mockDispatch = jest.fn();
+jest.mock("react-redux", () => ({
+  useDispatch: () => mockDispatch,
+}));
 
-const response = {
+const roles = {
   data: [
     {
       id: 1,
@@ -27,26 +29,18 @@ const response = {
   ],
 };
 
-const cancelTokenSource = {
-  cancel: jest.fn(),
-  token: { reason: { message: "user canceled" } },
-};
-
 test("EmployeeForm Add Test", async () => {
-  jest
-    .spyOn(axios.CancelToken, "source")
-    .mockReturnValueOnce(cancelTokenSource);
-  act(() => {
-    axios.get.mockResolvedValueOnce(response);
-  });
-  const handleSubmit = jest.fn((e, name, email, password, role) => {
-    e.preventDefault();
+  jest.spyOn(DatabaseService, "getRoles").mockReturnValueOnce(roles);
+  const handleSubmit = jest.fn((name, email, password, role) => {
     console.log(name);
     console.log(email);
     console.log(password);
     console.log(role);
   });
   render(<EmployeeForm onSubmit={handleSubmit} initialValues={{}} />);
+  await waitFor(() => {
+    const roleInput = screen.getByText("Admin");
+  });
   const nameInput = screen.getByLabelText("Name");
   userEvent.type(nameInput, "Ben");
   expect(nameInput.value).toBe("Ben");
@@ -55,9 +49,6 @@ test("EmployeeForm Add Test", async () => {
   expect(emailInput.value).toBe("ben@email.com");
   const passwordInput = screen.getByLabelText("Password");
   fireEvent.change(passwordInput, { target: { value: "1234" } });
-  await waitFor(() => {
-    const roleInput = screen.getByText("Admin");
-  });
   userEvent.selectOptions(
     screen.getByRole("combobox"),
     screen.getByRole("option", { name: "Admin" })
@@ -67,18 +58,18 @@ test("EmployeeForm Add Test", async () => {
   fireEvent.click(submitButton);
   expect(handleSubmit).toHaveBeenCalled();
   expect(handleSubmit).toHaveBeenCalledTimes(1);
+  expect(handleSubmit).toHaveBeenCalledWith(
+    "Ben",
+    "ben@email.com",
+    "1234",
+    "1"
+  );
 });
 
 test("EmployeeForm Initial Value Test", async () => {
-  jest
-    .spyOn(axios.CancelToken, "source")
-    .mockReturnValueOnce(cancelTokenSource);
-  // jest.spyOn(axios, "get").mockResolvedValueOnce("teresa teng");
-  act(() => {
-    axios.get.mockResolvedValueOnce(response);
-  });
-  const handleSubmit = jest.fn((e, name, email, password, role) => {
-    e.preventDefault();
+  jest.spyOn(DatabaseService, "getRoles").mockReturnValueOnce(roles);
+  const handleSubmit = jest.fn((name, email, password, role) => {
+    console.log(name);
   });
   render(
     <EmployeeForm
@@ -91,19 +82,15 @@ test("EmployeeForm Initial Value Test", async () => {
       }}
     />
   );
-  expect(axios.get).toHaveBeenCalled();
-  expect(axios.get).toBeCalledWith("http://localhost:3000/roles", {
-    cancelToken: cancelTokenSource.token,
+  expect(DatabaseService.getRoles).toHaveBeenCalled();
+  await waitFor(() => {
+    const roleInput = screen.getByText("Admin");
+    expect(roleInput.selected).toBeTruthy();
   });
-  expect(axios.CancelToken.source).toBeCalledTimes(1);
   const nameInput = screen.getByLabelText("Name");
   expect(nameInput.value).toBe("Ben");
   const emailInput = screen.getByLabelText("Email address");
   expect(emailInput.value).toBe("ben@gmail.com");
   const passwordInput = screen.getByLabelText("Password");
   expect(passwordInput.value).toBe("1234");
-  await waitFor(() => {
-    const roleInput = screen.getByText("Admin");
-    expect(roleInput.selected).toBeTruthy();
-  });
 });
